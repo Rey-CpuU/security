@@ -4,80 +4,91 @@ The **`security-team`** skill transforms your AI agent into a complete, 10-divis
 
 ---
 
-## 1. Topologi Arsitektur & Alur Kerja
+## 1. Topologi Arsitektur Sistem (Detailed Box Architecture)
 
-```mermaid
-flowchart TD
-    User["User Request / Instruksi Keamanan"] --> Orchestrator["security-team (Lead Security Architect)"]
-    Orchestrator --> Triage["security_team_triage.py (Routing Engine)"]
-
-    subgraph Subgraph_Roles["10 Divisi & Role Spesialisasi"]
-        R1["1. Penetration Tester (Web, API, Network, WAF)"]
-        R2["2. Red Team (Adversary Sim, Active Directory, C2)"]
-        R3["3. AppSec Engineer (SAST, Invariant Patching)"]
-        R4["4. Blue Team / SOC (Detection Rules, Sigma, YARA)"]
-        R5["5. DevSecOps (CI/CD, Containers, Supply Chain)"]
-        R6["6. DFIR Specialist (Memory Forensics, KAPE, IR)"]
-        R7["7. Threat Intelligence (CTI, MITRE ATT&CK, IOCs)"]
-        R8["8. Web3 Auditor (Solidity, Invariant Fuzzing)"]
-        R9["9. AI Red Teamer (Prompt Injection, Jailbreak)"]
-        R10["10. Purple Team & Governance (CISO, GRC, NIST)"]
-    end
-
-    Triage --> R1
-    Triage --> R2
-    Triage --> R3
-    Triage --> R4
-    Triage --> R5
-    Triage --> R6
-    Triage --> R7
-    Triage --> R8
-    Triage --> R9
-    Triage --> R10
-
-    subgraph Subgraph_Skills["Pustaka 1,214+ Sub-Skill Terpasang"]
-        S1["Web3 & Smart Contract (Pashov + DarkNavy)"]
-        S2["AI & LLM Security (Masriyan + Red Hat)"]
-        S3["Anthropic Cybersecurity (818 Skills)"]
-        S4["Trail of Bits (95 Skills - fp-check, Semgrep)"]
-        S5["Red Hat ProdSec (145 Skills - Containers, K8s)"]
-        S6["Security Agent Skills (78 Skills - Scanners, Recon)"]
-        S7["Enterprise Governance (cybersecurity-pro)"]
-        S8["Cloudflare (6-Phase Security Audit)"]
-    end
-
-    R1 --> S8
-    R1 --> S6
-    R2 --> S3
-    R3 --> S4
-    R3 --> S8
-    R4 --> S3
-    R4 --> S4
-    R5 --> S5
-    R5 --> S4
-    R6 --> S3
-    R7 --> S3
-    R7 --> S6
-    R8 --> S1
-    R8 --> S4
-    R9 --> S2
-    R10 --> S7
-
-    subgraph Subgraph_Outputs["Fase Verifikasi & Hasil Akhir"]
-        Verify["Fase Verifikasi: fp-check (Bebas False-Positive)"]
-        Output["Deliverables Terstandarisasi:<br/>- Executive & Board CISO Report<br/>- Technical Pentest PoCs & Diffs<br/>- Solidity Audit & Invariant Fuzz Suite<br/>- Invariant Security Patches<br/>- Aturan Deteksi SIEM (Sigma, YARA)"]
-    end
-
-    S1 --> Verify
-    S2 --> Verify
-    S3 --> Verify
-    S4 --> Verify
-    S5 --> Verify
-    S6 --> Verify
-    S7 --> Verify
-    S8 --> Verify
-
-    Verify --> Output
+```text
++===================================================================================================+
+|                                  USER PROMPT / SECURITY OBJECTIVE                                 |
+|         (Web App, API, Source Code, Solidity Contract, Windows AD, CI/CD, Memory Dump, LLM)       |
++===================================================================================================+
+                                                  │
+                                                  ▼
++===================================================================================================+
+|                        security-team (LEAD SECURITY ARCHITECT & ORCHESTRATOR)                     |
+|                                                                                                   |
+|   ┌───────────────────────────────────────────────────────────────────────────────────────────┐   |
+|   │ Triage & Routing Engine: scripts/security_team_triage.py                                  │   |
+|   │ • Keyword & Intent Extraction (Regex Scoring)   • Cross-Role Collaboration Orchestration  │   |
+|   │ • Lead Role Assignment                          • Context-Aware Sub-Skill Discovery       │   |
+|   └───────────────────────────────────────────────────────────────────────────────────────────┘   |
++===================================================================================================+
+                                                  │
+         ┌────────────────────────────────────────┴────────────────────────────────────────┐
+         ▼                                                                                 ▼
++─────────────────────────────────+                             +──────────────────────────────────+
+|      OFFENSIVE CAPABILITIES     |                             |      DEFENSIVE & GOVERNANCE      |
++─────────────────────────────────+                             +──────────────────────────────────+
+| [01] PENETRATION TESTER         |                             | [04] BLUE TEAM / SOC ANALYST     |
+|   • Web OWASP Top 10 & APIs     |                             |   • Sigma & YARA Detection Rules |
+|   • WAF Bypasses & Smuggling    |                             |   • SIEM Event Logs & Splunk SPL |
+|   • Port Scanning & Exploit PoC |                             |   • CSOC Automation (L1-L3)      |
++─────────────────────────────────+                             +──────────────────────────────────+
+| [02] RED TEAM (ADVERSARY SIM)   |                             | [05] DEVSECOPS & CLOUD SECURITY  |
+|   • Active Directory (BloodHound)|                            |   • GitHub Actions Runner Audit  |
+|   • DPAPI / Kerberoasting       |                             |   • Docker & K8s Pod Hardening   |
+|   • Lateral Movement & C2       |                             |   • SBOM & Supply Chain Security |
++─────────────────────────────────+                             +──────────────────────────────────+
+| [08] WEB3 & SMART CONTRACT      |                             | [06] DFIR SPECIALIST             |
+|   • Solidity & EVM Audit        |                             |   • Memory Forensics (Volatility)|
+|   • Invariant Fuzzing (Echidna) |                             |   • KAPE & Hayabusa Timelines    |
+|   • Flash Loans & On-Chain Hack |                             |   • PICERL Breach Containment    |
++─────────────────────────────────+                             +──────────────────────────────────+
+| [09] AI & LLM RED TEAMER        |                             | [07] THREAT INTELLIGENCE (CTI)   |
+|   • Direct/Indirect Injections  |                             |   • MITRE ATT&CK Mapping         |
+|   • Jailbreaks & Persona Bypasses|                            |   • IOC Pivot & Infrastructure   |
+|   • Agent Tool Calling Poisoning|                             |   • Hypothesis Threat Hunting    |
++─────────────────────────────────+                             +──────────────────────────────────+
+         │                                                                                 │
+         └────────────────────────────────────────┬────────────────────────────────────────┘
+                                                  │
+                                                  ▼
++===================================================================================================+
+|                         APPLICATION SECURITY (APPSEC) & PURPLE TEAM BRIDGE                        |
+|                                                                                                   |
+|  [03] APPSEC ENGINEER: SAST, CodeQL/Semgrep, Source Taint Analysis, Invariant Bug Patching        |
+|  [10] PURPLE TEAM & CISO: Joint Atomic Testing, Detection Tuning, NIST CSF & Board Governance     |
++===================================================================================================+
+                                                  │
+                                                  ▼
++===================================================================================================+
+|                           GLOBAL SUB-SKILL ECOSYSTEM (1,214+ SKILLS)                              |
++───────────────────────────────────────┬───────────────────────────────────────────────────────────+
+| Web3 & Smart Contracts                | Pashov (fizz, solidity-auditor, x-ray) + DarkNavy         |
+| AI & LLM Security                     | Masriyan (ai-redteam, 16-ai-llm-security) + Red Hat       |
+| Penetration Testing & Web             | Anthropic (818 skills) + Wang (78 skills) + Cloudflare    |
+| Code Review & Static Analysis         | Trail of Bits (95 skills: fp-check, semgrep, c-review)    |
+| Container & DevSecOps                 | Red Hat ProdSec (145 skills: container, k8s, supply-chain)|
+| DFIR & Threat Intelligence            | Anthropic + Masriyan (01-recon-osint .. 22-purple-team)   |
+| Enterprise CISO Governance            | Pitimon (cybersecurity-pro: 22 enterprise domains)        |
++===================================================================================================+
+                                                  │
+                                                  ▼
++===================================================================================================+
+|                         VERIFICATION PIPELINE (Bebas False-Positive)                              |
+|                                                                                                   |
+|   [Phase 1: Input Control] ──► [Phase 2: Dataflow Taint] ──► [Phase 3: fp-check Mathematical Proof]
++===================================================================================================+
+                                                  │
+                                                  ▼
++===================================================================================================+
+|                                STANDARDIZED DELIVERABLES & OUTPUTS                                |
+|                                                                                                   |
+|  • Executive Summary: CISO Risk Metrics, Business Impact & Compliance Mapping (NIST/ISO)          |
+|  • Technical Findings: Root-Cause Trace, CVSS v3.1/v4.0 Score & Bounded Reproduction PoC          |
+|  • Invariant Security Patch: Minimal Effective Git Diff & Automated Regression Tests              |
+|  • Stateful Invariant Fuzz Suite: Echidna / Medusa Test Harness (Web3)                            |
+|  • Defensive Detection Rules: Production-Ready Sigma Rules & YARA Signatures                      |
++===================================================================================================+
 ```
 
 ---
@@ -208,7 +219,7 @@ Gunakan contoh-contoh prompt di bawah ini untuk mengaktifkan fitur dan peran spe
 ```text
 security-team/
 ├── SKILL.md                          # Panduan orkestrasi & routing matrix 10 peran
-├── README.md                         # Dokumentasi lengkap, topologi, & katalog prompt
+├── README.md                         # Dokumentasi lengkap, topologi ASCII, & katalog prompt
 ├── references/
 │   ├── role-descriptions.md          # Rincian teknis 10 divisi
 │   ├── pentest-team-playbook.md      # Runbook taktis tim Penetration Testing
