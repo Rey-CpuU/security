@@ -21,19 +21,53 @@
 
 ---
 
-## 🎬 Demo / Preview
+## 🎬 Demo / Preview Interaktif
+
+Berikut adalah simulasi alur eksekusi saat developer meminta bantuan perbaikan celah keamanan:
 
 ```text
-┌─────────────────────────────────────────────────────────────────────────────┐
-│ > /security-team Audit repo ini dan buatkan patch aman untuk celah kritis   │
-├─────────────────────────────────────────────────────────────────────────────┤
-│ [1/4] 🔍 Triaging Context: Python FastAPI + PostgreSQL + JWT Authentication │
-│ [2/4] 👥 Mobilizing Roles: [AppSec Engineer] & [Web Penetration Tester]     │
-│ [3/4] 🛡️ Verifying Sinks: fp-check 3-Phase Verification (0 False-Positive) │
-│ [4/4] 📦 Deliverable Ready: 1 Verified Bug (IDOR) + Invariant Patch (Diff)  │
-└─────────────────────────────────────────────────────────────────────────────┘
+┌──[ Antigravity / Claude Code Terminal Session ]────────────────────────────┐
+│                                                                            │
+│ > /security-team Audit API user dan perbaiki celah IDOR di src/routes/user │
+│                                                                            │
+│ 🔍 [PHASE 1: SMART TRIAGE & RECONNAISSANCE]                                 │
+│    ├─ Stack Detected   : Python 3.11 • FastAPI • SQLAlchemy • JWT Bearer   │
+│    ├─ Target Scope     : src/routes/user.py (GET /api/v1/user/{id})        │
+│    ├─ Lead Role        : [Role 03] AppSec Engineer & Invariant Patching    │
+│    ├─ Support Role     : [Role 01] Web & API Penetration Tester            │
+│    └─ Sub-Skills Loaded: fp-check, implement-patch, testing-for-idor       │
+│                                                                            │
+│ 💥 [PHASE 2: VULNERABILITY DISCOVERY & PoC PROOF]                           │
+│    ├─ Finding Name     : CWE-639: Insecure Direct Object Reference (IDOR)  │
+│    ├─ Severity Score   : CVSS v4.0: 8.5 (HIGH) [CVSS:4.0/AV:N/AC:L/PR:L]   │
+│    ├─ Replay Exploit   : curl -s -X GET http://localhost:8000/api/user/1   │
+│    │                     -H "Authorization: Bearer <attacker_jwt_token>"   │
+│    └─ Exploit Output   : 200 OK {"id":1,"role":"admin","secret":"sk_live"} │
+│                          (Terbukti data admin bocor ke user biasa!)        │
+│                                                                            │
+│ 🛡️ [PHASE 3: ZERO FALSE-POSITIVE VERIFICATION (fp-check)]                  │
+│    ├─ Step 1 (Dataflow): Source 'user_id' mengalir ke SQL sink tanpa filte │
+│    ├─ Step 2 (Bounds)  : Attacker non-privileged mampu melewati boundary   │
+│    ├─ Step 3 (Harness) : Automated exploit execution berhasil 10/10 run    │
+│    └─ Verifikasi Akhir : [VERIFIED EXPLOITABLE] (False-Positive: 0%)       │
+│                                                                            │
+│ 📦 [PHASE 4: INVARIANT SECURITY PATCH (READY-TO-MERGE)]                     │
+│    --- a/src/routes/user.py                                                │
+│    +++ b/src/routes/user.py                                                │
+│    @@ -42,3 +42,6 @@ def get_user_profile(user_id: int, current_user):     │
+│    -    return db.query(User).filter(User.id == user_id).first()           │
+│    +    if current_user.id != user_id and not current_user.is_admin:       │
+│    +        raise HTTPException(status_code=403, detail="Access Denied")   │
+│    +    return db.query(User).filter(User.id == user_id).first()           │
+│                                                                            │
+│ 📋 [PHASE 5: DELIVERABLES GENERATED]                                        │
+│    [✓] Invariant Git Patch         : patches/fix-cwe-639-idor.patch        │
+│    [✓] Regression Test Suite       : tests/test_idor.py (100% PASSED)      │
+│    [✓] CISO Executive Briefing     : reports/CISO-IDOR-Risk-Report.md      │
+│                                                                            │
+└────────────────────────────────────────────────────────────────────────────┘
 ```
-> *Tampilan eksekusi real-time saat `security-team` menerima prompt, membedah konteks, memanggil sub-skill relevan, dan menghasilkan perbaikan kode siap-merge.*
+> *Tampilan eksekusi real-time saat `security-team` menerima prompt, membedah konteks, memvalidasi bukti eksploitasi, dan langsung menulis kode perbaikan siap-merge.*
 
 ---
 
@@ -102,57 +136,87 @@ Alur otomatis dari prompt pengguna hingga penyerahan laporan bebas false-positiv
 
 ## 📐 Topologi Arsitektur (Detail Box ASCII Architecture)
 
+Topologi di bawah menunjukkan bagaimana data dan instruksi mengalir dari input awal pengguna hingga menghasilkan artefak keamanan terverifikasi:
+
 ```text
-┌──────────────────────────────────────────────────────────────────────────────┐
-│                        USER PROMPT / SECURITY GOAL                           │
-│  In: Kode Sumber, URL Web, Smart Contract, PCAP, Memory Dump, Cloud Config   │
-│  Out: Instruksi tugas dan target batasan ruang lingkup (Scope)               │
-└──────────────────────────────────────┬───────────────────────────────────────┘
-                                       ▼
-┌──────────────────────────────────────────────────────────────────────────────┐
-│             security-team (LEAD SECURITY ARCHITECT & ORCHESTRATOR)           │
-│  Peran: Mengurai intensi pengguna dan menetapkan rencana strategi audit      │
-│  In: Prompt mentah                   │ Out: Context Plan & Role Mandate      │
-└──────────────────────────────────────┬───────────────────────────────────────┘
-                                       ▼
-┌──────────────────────────────────────────────────────────────────────────────┐
-│              TRIAGE ENGINE (scripts/security_team_triage.py)                 │
-│  Peran: Scoring kata kunci (regex) & seleksi otomatis modul sub-skill        │
-│  In: Task Context                    │ Out: 1 Lead Role + Support Sub-Skills │
-└──────────────────────────────────────┬───────────────────────────────────────┘
-                                       ▼
-┌──────────────────────────────────────────────────────────────────────────────┐
-│                  10 DIVISI SPESIALIS KEAMANAN (ROLE EXECUTION)               │
-│  ├─ [01] Pentest Web/API      ├─ [04] Blue Team / SOC  ├─ [07] Threat Intel  │
-│  ├─ [02] AppSec & Patching    ├─ [05] DevSecOps        ├─ [08] Web3 / DeFi   │
-│  ├─ [03] Cloud & Container    ├─ [06] DFIR Forensics   ├─ [09] AI Red Team   │
-│                               └─ [10] Purple Team & CISO Governance          │
-│  In: Targeted Scope                  │ Out: Raw Findings & Attack Trees      │
-└──────────────────────────────────────┬───────────────────────────────────────┘
-                                       ▼
-┌──────────────────────────────────────────────────────────────────────────────┐
-│             PUSTAKA 1.214+ SUB-SKILL TERPADU (GLOBAL ECOSYSTEM HARNESS)      │
-│  Peran: Modul taktis (Anthropic, Trail of Bits, Red Hat, DarkNavy, Pashov)   │
-│  In: Vulnerability Candidate         │ Out: Deep Static/Dynamic Evidence     │
-└──────────────────────────────────────┬───────────────────────────────────────┘
-                                       ▼
-┌──────────────────────────────────────────────────────────────────────────────┐
-│            VERIFIKASI KETAT: fp-check (ZERO FALSE-POSITIVE ENGINE)           │
-│  Peran: Uji pembuktian 3 fase: Source-to-Sink ─► Exploitability ─► PoC Test  │
-│  In: Unverified Finding              │ Out: Proven Exploit ATAU Rejection    │
-└──────────────────────────────────────┬───────────────────────────────────────┘
-                                       ▼
-┌──────────────────────────────────────────────────────────────────────────────┐
-│                         STANDARDIZED DELIVERABLES                            │
-│  • Executive CISO & Risk Matrix      • Reproducible Exploit PoCs             │
-│  • Invariant Security Patches (Diff) • SIEM & EDR Detection Rules (Sigma/YARA│
-└──────────────────────────────────────────────────────────────────────────────┘
+┌────────────────────────────────────────────────────────────────────────────┐
+│ LAYER 1: INPUT & CONTEXT INGESTION (SCOPED TARGETS)                        │
+│ • Web/API URL   • Git Codebase   • Solidity Contract   • Memory/PCAP Dump  │
+│ Peran: Menerima target & batasan scope otorisasi dari developer            │
+│ In: Prompt Instruksi & Target Scope   │ Out: Target Context Specification  │
+└─────────────────────────────────────┬──────────────────────────────────────┘
+                                      │
+                                      ▼
+┌────────────────────────────────────────────────────────────────────────────┐
+│ LAYER 2: LEAD ARCHITECT & TRIAGE ENGINE (security_team_triage.py)          │
+│ • Keyword Regex Scoring Engine      • Technology Stack Auto-Detection      │
+│ • Lead Role Mandate Assignment      • Dynamic Sub-Skill Route Selector     │
+│ In: Target Context Specification    │ Out: Assigned Lead + Support Squad   │
+└─────────────────────────────────────┬──────────────────────────────────────┘
+                                      │
+                                      ▼
+┌────────────────────────────────────────────────────────────────────────────┐
+│ LAYER 3: 10 SPECIALIZED SECURITY DIVISIONS (ROLES & RESPONSIBILITIES)      │
+├─────────────────────────────────────┬──────────────────────────────────────┤
+│ [OFFENSIVE SQUAD]                   │ [DEFENSIVE & BUILD SQUAD]            │
+│ ├─ [01] Web & API Penetration Tester│ ├─ [03] AppSec & Invariant Patching  │
+│ └─ [02] Red Team Adversary Operator │ ├─ [04] Blue Team & SOC Automation   │
+│                                     │ └─ [05] DevSecOps & Cloud Hardening  │
+├─────────────────────────────────────┼──────────────────────────────────────┤
+│ [INVESTIGATION & INTEL SQUAD]       │ [FRONTIER & GOVERNANCE SQUAD]        │
+│ ├─ [06] DFIR Forensics & Malware    │ ├─ [08] Web3 & Smart Contract Auditor│
+│ └─ [07] Threat Intel & ATT&CK Hunter│ ├─ [09] AI & LLM Red Teamer          │
+│                                     │ └─ [10] Purple Team & CISO Governance│
+├─────────────────────────────────────┴──────────────────────────────────────┤
+│ In: Role Mandate Assignment         │ Out: Raw Findings & Attack Trees     │
+└─────────────────────────────────────┬──────────────────────────────────────┘
+                                      │
+                                      ▼
+┌────────────────────────────────────────────────────────────────────────────┐
+│ LAYER 4: GLOBAL SUB-SKILL ECOSYSTEM (1.214+ SPECIALIZED MODULES)           │
+│ • Trail of Bits (95): fp-check, Semgrep Rules, Invariant Compiler Prover   │
+│ • Anthropic Cyber (818): Active Directory, Kernel, C2, KAPE, Metasploit    │
+│ • Red Hat ProdSec (145): K8s, Container Isolation, SBOM, SLSA Provenance  │
+│ • Pashov & DarkNavy (45): Solidity Invariant Fuzzing, DeFi Attack Replay   │
+│ • Security-Agent & Masriyan (111): AI Jailbreak, OSINT, Network Replay     │
+│ In: Raw Exploit Hypothesis          │ Out: In-Depth Telemetry & Proof Data │
+└─────────────────────────────────────┬──────────────────────────────────────┘
+                                      │
+                                      ▼
+┌────────────────────────────────────────────────────────────────────────────┐
+│ LAYER 5: STRICT VERIFICATION GATEWAY (fp-check ZERO FALSE-POSITIVE)       │
+│                                                                            │
+│  [Fase 1: Dataflow]         [Fase 2: Bounds]        [Fase 3: PoC Replay]   │
+│  ┌───────────────────┐      ┌──────────────────┐    ┌──────────────────┐   │
+│  │ Source-to-Sink    │ ───► │ Attacker Control │──► │ Standalone PoC   │   │
+│  │ Path Tracing      │      │ & Bounds Proof   │    │ Execution Test   │   │
+│  └───────────────────┘      └──────────────────┘    └──────────────────┘   │
+│           │                          │                       │             │
+│           └──────────────────────────┼───────────────────────┘             │
+│                                      ▼                                     │
+│                     [Apakah Semua Bukti Terpenuhi?]                        │
+│                      ├── TIDAK ──► [DISMISSED] Temuan Palsu Dianulir       │
+│                      └── YA    ──► [VERIFIED] Terbukti 100% Exploitable    │
+│ In: Candidate Findings              │ Out: Verified Vulnerability Package  │
+└─────────────────────────────────────┬──────────────────────────────────────┘
+                                      │
+                                      ▼
+┌────────────────────────────────────────────────────────────────────────────┐
+│ LAYER 6: STANDARDIZED DUAL DELIVERABLES (OUTPUT LAYER)                     │
+├─────────────────────────────────────┬──────────────────────────────────────┤
+│ 📊 UNTUK EXECUTIVE & CISO (BISNIS)  │ 🛠️ UNTUK DEVELOPER & OPS (TEKNIS)   │
+│ • CISO Executive Summary Report     │ • Invariant Git Diff Security Patch  │
+│ • Risk Heatmap (Likelihood/Impact)  │ • Standalone Reproducible PoC Script │
+│ • Estimasi Cost of Breach & ROI     │ • Unit & Regression Test Suite       │
+│ • Kepatuhan NIST CSF & ISO 27001    │ • Aturan SIEM/EDR (Sigma YAML & YARA)│
+└─────────────────────────────────────┴──────────────────────────────────────┘
 ```
 
 > **Legenda Arsitektur:**
-> - `┌─┐│└─┘`: Batas komponen terisolasi.
-> - `▼`: Aliran data sekuensial (piped context).
-> - `├─`: Distribusi tugas ke divisi spesialis.
+> - `┌ ─ ┐ │ └ ┘`: Batas komponen layer sistem yang terisolasi.
+> - `▼` / `──►`: Aliran data sekuensial dari input awal menuju verifikasi akhir.
+> - `├─` / `└─`: Pembagian tugas ke divisi spesialis atau cabang pengujian.
+> - `In / Out`: Kontrak data masuk dan data keluar pada setiap layer.
 
 ---
 
