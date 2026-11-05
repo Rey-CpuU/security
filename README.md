@@ -1,3 +1,5 @@
+<div align="center">
+
 ```text
   ____  _____ ____ _   _ ____  ___ _______   __ _____ _____    _    __  __ 
  / ___|| ____/ ___| | | |  _ \|_ _|_   _\ \ / /|_   _| ____|  / \  |  \/  |
@@ -11,13 +13,17 @@
 
 # 🛡️ security-team
 
-> Satu skill orkestrator untuk memimpin 10 divisi cyber security spesialis dan 1.200+ modul keamanan enterprise langsung di AI coding assistant Anda.
+### Satu skill orkestrator untuk memimpin 10 divisi cyber security spesialis<br>dan 1.200+ modul keamanan enterprise langsung di AI coding assistant Anda.
 
-[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
-[![Platform](https://img.shields.io/badge/Platform-Antigravity%20%7C%20Claude%20Code%20%7C%20Codex-brightgreen)](https://github.com/Rey-CpuU/security)
-[![Specialized Roles](https://img.shields.io/badge/Specialized%20Roles-10%20Divisions-blueviolet)](https://github.com/Rey-CpuU/security)
-[![Sub-Skills Ecosystem](https://img.shields.io/badge/Sub--Skills-1%2C214%2B%20Modules-orange)](https://github.com/Rey-CpuU/security)
-[![Verification](https://img.shields.io/badge/Verification-Zero%20False--Positive-success)](https://github.com/Rey-CpuU/security)
+<p align="center">
+  <a href="LICENSE"><img src="https://img.shields.io/badge/License-MIT-blue.svg" alt="License: MIT"></a>
+  <a href="https://github.com/Rey-CpuU/security"><img src="https://img.shields.io/badge/Platform-Antigravity%20%7C%20Claude%20Code%20%7C%20Codex-brightgreen" alt="Platform"></a>
+  <a href="https://github.com/Rey-CpuU/security"><img src="https://img.shields.io/badge/Specialized%20Roles-10%20Divisions-blueviolet" alt="Specialized Roles"></a>
+  <a href="https://github.com/Rey-CpuU/security"><img src="https://img.shields.io/badge/Sub--Skills-1%2C214%2B%20Modules-orange" alt="Sub-Skills Ecosystem"></a>
+  <a href="https://github.com/Rey-CpuU/security"><img src="https://img.shields.io/badge/Verification-Zero%20False--Positive-success" alt="Verification"></a>
+</p>
+
+</div>
 
 ---
 
