@@ -144,23 +144,25 @@ Alur otomatis dari prompt pengguna hingga penyerahan laporan bebas false-positiv
 
 Topologi di bawah menunjukkan bagaimana data dan instruksi mengalir dari input awal pengguna hingga menghasilkan artefak keamanan terverifikasi:
 
-```text
+<div align="center">
+
+<pre align="center">
 ┌────────────────────────────────────────────────────────────────────────────┐
 │ LAYER 1: INPUT & CONTEXT INGESTION (SCOPED TARGETS)                        │
 │ • Web/API URL   • Git Codebase   • Solidity Contract   • Memory/PCAP Dump  │
 │ Peran: Menerima target & batasan scope otorisasi dari developer            │
 │ In: Prompt Instruksi & Target Scope   │ Out: Target Context Specification  │
 └─────────────────────────────────────┬──────────────────────────────────────┘
-                                      │
-                                      ▼
+                                      │                                       
+                                      ▼                                       
 ┌────────────────────────────────────────────────────────────────────────────┐
 │ LAYER 2: LEAD ARCHITECT & TRIAGE ENGINE (security_team_triage.py)          │
 │ • Keyword Regex Scoring Engine      • Technology Stack Auto-Detection      │
 │ • Lead Role Mandate Assignment      • Dynamic Sub-Skill Route Selector     │
 │ In: Target Context Specification    │ Out: Assigned Lead + Support Squad   │
 └─────────────────────────────────────┬──────────────────────────────────────┘
-                                      │
-                                      ▼
+                                      │                                       
+                                      ▼                                       
 ┌────────────────────────────────────────────────────────────────────────────┐
 │ LAYER 3: 10 SPECIALIZED SECURITY DIVISIONS (ROLES & RESPONSIBILITIES)      │
 ├─────────────────────────────────────┬──────────────────────────────────────┤
@@ -176,21 +178,21 @@ Topologi di bawah menunjukkan bagaimana data dan instruksi mengalir dari input a
 ├─────────────────────────────────────┴──────────────────────────────────────┤
 │ In: Role Mandate Assignment         │ Out: Raw Findings & Attack Trees     │
 └─────────────────────────────────────┬──────────────────────────────────────┘
-                                      │
-                                      ▼
+                                      │                                       
+                                      ▼                                       
 ┌────────────────────────────────────────────────────────────────────────────┐
 │ LAYER 4: GLOBAL SUB-SKILL ECOSYSTEM (1.214+ SPECIALIZED MODULES)           │
 │ • Trail of Bits (95): fp-check, Semgrep Rules, Invariant Compiler Prover   │
 │ • Anthropic Cyber (818): Active Directory, Kernel, C2, KAPE, Metasploit    │
-│ • Red Hat ProdSec (145): K8s, Container Isolation, SBOM, SLSA Provenance  │
+│ • Red Hat ProdSec (145): K8s, Container Isolation, SBOM, SLSA Provenance  │ 
 │ • Pashov & DarkNavy (45): Solidity Invariant Fuzzing, DeFi Attack Replay   │
 │ • Security-Agent & Masriyan (111): AI Jailbreak, OSINT, Network Replay     │
 │ In: Raw Exploit Hypothesis          │ Out: In-Depth Telemetry & Proof Data │
 └─────────────────────────────────────┬──────────────────────────────────────┘
-                                      │
-                                      ▼
+                                      │                                       
+                                      ▼                                       
 ┌────────────────────────────────────────────────────────────────────────────┐
-│ LAYER 5: STRICT VERIFICATION GATEWAY (fp-check ZERO FALSE-POSITIVE)       │
+│ LAYER 5: STRICT VERIFICATION GATEWAY (fp-check ZERO FALSE-POSITIVE)       │ 
 │                                                                            │
 │  [Fase 1: Dataflow]         [Fase 2: Bounds]        [Fase 3: PoC Replay]   │
 │  ┌───────────────────┐      ┌──────────────────┐    ┌──────────────────┐   │
@@ -205,18 +207,20 @@ Topologi di bawah menunjukkan bagaimana data dan instruksi mengalir dari input a
 │                      └── YA    ──► [VERIFIED] Terbukti 100% Exploitable    │
 │ In: Candidate Findings              │ Out: Verified Vulnerability Package  │
 └─────────────────────────────────────┬──────────────────────────────────────┘
-                                      │
-                                      ▼
+                                      │                                       
+                                      ▼                                       
 ┌────────────────────────────────────────────────────────────────────────────┐
 │ LAYER 6: STANDARDIZED DUAL DELIVERABLES (OUTPUT LAYER)                     │
 ├─────────────────────────────────────┬──────────────────────────────────────┤
-│ 📊 UNTUK EXECUTIVE & CISO (BISNIS)  │ 🛠️ UNTUK DEVELOPER & OPS (TEKNIS)   │
+│ 📊 UNTUK EXECUTIVE & CISO (BISNIS)  │ 🛠️ UNTUK DEVELOPER & OPS (TEKNIS)   │  
 │ • CISO Executive Summary Report     │ • Invariant Git Diff Security Patch  │
 │ • Risk Heatmap (Likelihood/Impact)  │ • Standalone Reproducible PoC Script │
 │ • Estimasi Cost of Breach & ROI     │ • Unit & Regression Test Suite       │
 │ • Kepatuhan NIST CSF & ISO 27001    │ • Aturan SIEM/EDR (Sigma YAML & YARA)│
 └─────────────────────────────────────┴──────────────────────────────────────┘
-```
+</pre>
+
+</div>
 
 > **Legenda Arsitektur:**
 > - `┌ ─ ┐ │ └ ┘`: Batas komponen layer sistem yang terisolasi.
