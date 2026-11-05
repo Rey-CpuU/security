@@ -8,52 +8,76 @@ The **`security-team`** skill transforms your AI agent into a complete, 10-divis
 
 ```mermaid
 flowchart TD
-    User["User Prompt / Instruksi Keamanan"] --> Orchestrator["security-team (Lead Security Architect & Orchestrator)"]
+    User["User Request / Instruksi Keamanan"] --> Orchestrator["security-team (Lead Security Architect)"]
+    Orchestrator --> Triage["security_team_triage.py (Routing Engine)"]
 
-    Orchestrator -->|"Triage Otomatis (security_team_triage.py)"| Router{"Routing Engine"}
-
-    subgraph Roles["10 Divisi & Role Spesialisasi Tim Keamanan"]
-        direction TB
-        R1["1. Penetration Tester<br/>(Web, API, Network, WAF Bypass)"]
-        R2["2. Red Team<br/>(Adversary Sim, Active Directory, C2)"]
-        R3["3. AppSec Engineer<br/>(SAST, Invariant Patching, Code Audit)"]
-        R4["4. Blue Team / SOC<br/>(Detection Rules, Sigma/YARA, CSOC)"]
-        R5["5. DevSecOps<br/>(CI/CD, Containers, Supply Chain, IaC)"]
-        R6["6. DFIR Specialist<br/>(Memory Forensics, KAPE, Incident Triage)"]
-        R7["7. Threat Intelligence<br/>(CTI, MITRE ATT&CK, IOC Pivoting)"]
-        R8["8. Web3 & Blockchain Auditor<br/>(Solidity, Fuzzing Echidna, On-Chain)"]
-        R9["9. AI & LLM Red Teamer<br/>(Prompt Injection, Jailbreak, Tool Abuse)"]
-        R10["10. Purple Team & Governance<br/>(Joint Simulation, CISO Report, NIST)"]
+    subgraph Subgraph_Roles["10 Divisi & Role Spesialisasi"]
+        R1["1. Penetration Tester (Web, API, Network, WAF)"]
+        R2["2. Red Team (Adversary Sim, Active Directory, C2)"]
+        R3["3. AppSec Engineer (SAST, Invariant Patching)"]
+        R4["4. Blue Team / SOC (Detection Rules, Sigma, YARA)"]
+        R5["5. DevSecOps (CI/CD, Containers, Supply Chain)"]
+        R6["6. DFIR Specialist (Memory Forensics, KAPE, IR)"]
+        R7["7. Threat Intelligence (CTI, MITRE ATT&CK, IOCs)"]
+        R8["8. Web3 Auditor (Solidity, Invariant Fuzzing)"]
+        R9["9. AI Red Teamer (Prompt Injection, Jailbreak)"]
+        R10["10. Purple Team & Governance (CISO, GRC, NIST)"]
     end
 
-    Router --> R1 & R2 & R3 & R4 & R5 & R6 & R7 & R8 & R9 & R10
+    Triage --> R1
+    Triage --> R2
+    Triage --> R3
+    Triage --> R4
+    Triage --> R5
+    Triage --> R6
+    Triage --> R7
+    Triage --> R8
+    Triage --> R9
+    Triage --> R10
 
-    subgraph SkillRepo["Pustaka 1.214+ Sub-Skill Terpasang (Global Store)"]
-        direction TB
-        S_Web3["Web3 & Smart Contract (Pashov + DarkNavy)<br/>contract-auditor, solidity-auditor, fizz, x-ray, exploit-investigator"]
-        S_AIRedTeam["AI & LLM Security (Masriyan + Red Hat)<br/>ai-redteam, 16-ai-llm-security, agentic-actions-auditor"]
-        S_Anthropic["Anthropic Cybersecurity (818 Skills)<br/>Playbook Pentest, AD Abuse, DFIR & Timeline"]
-        S_TOB["Trail of Bits (95 Skills)<br/>fp-check, Semgrep, CodeQL, Fuzzing & Invariant Patching"]
-        S_RedHat["Red Hat ProdSec (145 Skills)<br/>Container, Kubernetes, Secret Scanning & Supply Chain"]
-        S_Wang["Security Agent Skills (78 Skills)<br/>Autonomous Scanner, WAF Bypass, Hardware Recon"]
-        S_Governance["Enterprise Governance (cybersecurity-pro)<br/>CISO Board Reports, NIST CSF, OT/ICS, Shannon Manifests"]
-        S_Cloudflare["Cloudflare (1 Skill)<br/>Full 6-Phase End-to-End Security Audit Engine"]
+    subgraph Subgraph_Skills["Pustaka 1,214+ Sub-Skill Terpasang"]
+        S1["Web3 & Smart Contract (Pashov + DarkNavy)"]
+        S2["AI & LLM Security (Masriyan + Red Hat)"]
+        S3["Anthropic Cybersecurity (818 Skills)"]
+        S4["Trail of Bits (95 Skills - fp-check, Semgrep)"]
+        S5["Red Hat ProdSec (145 Skills - Containers, K8s)"]
+        S6["Security Agent Skills (78 Skills - Scanners, Recon)"]
+        S7["Enterprise Governance (cybersecurity-pro)"]
+        S8["Cloudflare (6-Phase Security Audit)"]
     end
 
-    R1 -.->|"Panggil Playbook"| S_Cloudflare & S_Wang & S_Anthropic
-    R2 -.->|"Panggil Playbook"| S_Anthropic
-    R3 -.->|"Panggil Playbook"| S_TOB & S_Cloudflare
-    R4 -.->|"Panggil Playbook"| S_Anthropic & S_TOB
-    R5 -.->|"Panggil Playbook"| S_RedHat & S_TOB
-    R6 -.->|"Panggil Playbook"| S_Anthropic
-    R7 -.->|"Panggil Playbook"| S_Anthropic & S_Wang
-    R8 -.->|"Panggil Playbook"| S_Web3 & S_TOB
-    R9 -.->|"Panggil Playbook"| S_AIRedTeam
-    R10 -.->|"Panggil Playbook"| S_Governance & R1 & R4
+    R1 --> S8
+    R1 --> S6
+    R2 --> S3
+    R3 --> S4
+    R3 --> S8
+    R4 --> S3
+    R4 --> S4
+    R5 --> S5
+    R5 --> S4
+    R6 --> S3
+    R7 --> S3
+    R7 --> S6
+    R8 --> S1
+    R8 --> S4
+    R9 --> S2
+    R10 --> S7
 
-    Roles --> Verification{"Fase Verifikasi: fp-check<br/>(Bebas False-Positive)"}
+    subgraph Subgraph_Outputs["Fase Verifikasi & Hasil Akhir"]
+        Verify["Fase Verifikasi: fp-check (Bebas False-Positive)"]
+        Output["Deliverables Terstandarisasi:<br/>- Executive & Board CISO Report<br/>- Technical Pentest PoCs & Diffs<br/>- Solidity Audit & Invariant Fuzz Suite<br/>- Invariant Security Patches<br/>- Aturan Deteksi SIEM (Sigma, YARA)"]
+    end
 
-    Verification --> Deliverables["Output & Deliverables Terstandarisasi<br/>- Executive & Board CISO Report<br/>- Technical Pentest PoC & Reproduction<br/>- Solidity Audit & Stateful Invariant Fuzz Suite<br/>- Verified Invariant Patch (Git Diff & Test)<br/>- Aturan Deteksi SIEM (Sigma, YARA)"]
+    S1 --> Verify
+    S2 --> Verify
+    S3 --> Verify
+    S4 --> Verify
+    S5 --> Verify
+    S6 --> Verify
+    S7 --> Verify
+    S8 --> Verify
+
+    Verify --> Output
 ```
 
 ---
