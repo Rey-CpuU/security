@@ -4,7 +4,7 @@ description: Orchestrates an enterprise security team across 10 specialized oper
 license: MIT
 compatibility: Claude Code; Antigravity; Python 3.10+; full plugin checkout for shared utilities
 metadata:
-  version: 2.1.0
+  version: 2.1.1
   author: Rey-CpuU
   tags: cybersecurity, security-team, orchestrator, pentest, red-team, appsec, blue-team, soc, devsecops, dfir, threat-intelligence, web3, smart-contracts, ai-redteam, prompt-injection, purple-team, ciso, governance
 ---

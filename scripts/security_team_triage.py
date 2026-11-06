@@ -19,6 +19,8 @@ if hasattr(sys.stdout, "reconfigure"):
 if hasattr(sys.stderr, "reconfigure"):
     sys.stderr.reconfigure(encoding="utf-8", errors="replace")
 
+VERSION = "2.1.1"
+
 ROLE_MAPPINGS = {
     "pentest": {
         "role": "Penetration Tester",
@@ -113,9 +115,9 @@ ROLE_MAPPINGS = {
         "role": "DevSecOps & Cloud Security",
         "description": "CI/CD pipeline security, container hardening, Kubernetes, IaC, and supply chain",
         "keywords": [
-            r"devsecops", r"ci[/-]cd", r"github\s+actions", r"docker", r"container(?:s)?",
+            r"devsecops", r"ci[/-]cd", r"github\s+actions", r"docker(?:file|-compose)?", r"container(?:s|ized|ization)?",
             r"kubernetes", r"k8s", r"supply\s+chain", r"sbom", r"terraform", r"gitleaks",
-            r"cloud\s+security"
+            r"cloud\s+security", r"jenkins", r"gitlab\s*ci", r"trivy", r"helm"
         ],
         "default_secondary": "appsec",
         "recommended_skills": [
@@ -175,7 +177,7 @@ ROLE_MAPPINGS = {
         "keywords": [
             r"solidity", r"smart\s+contract(?:s)?", r"web3", r"fizz", r"echidna", r"medusa",
             r"foundry", r"reentrancy", r"defi", r"flash\s+loan", r"on-chain", r"blockchain",
-            r"(?:erc[-_]?\d+|erc20|erc721|tokenomics|crypto\s+token)",
+            r"(?:erc[-_]?\d+|erc20|erc721|tokenomics|crypto\s+token|token\s+contract|token\s+mint|token\s+burn)",
             r"wad", r"ray", r"0x[a-fA-F0-9]{40}\b", r"0x[a-fA-F0-9]{64}\b", r"[\w\-./\\]+\.sol\b"
         ],
         "default_secondary": "appsec",
@@ -375,7 +377,7 @@ def main():
     parser.add_argument(
         "-v", "--version",
         action="version",
-        version="security_team_triage 2.1.0"
+        version=f"security_team_triage {VERSION}"
     )
 
     args = parser.parse_args()

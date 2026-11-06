@@ -134,6 +134,28 @@ class TestSecurityTeamTriage(unittest.TestCase):
             res = triage(prompt)
             self.assertNotIn("static-analysis", res["primary_skills"])
 
+    def test_web3_contextual_token_contracts(self):
+        """Web3 queries with 'token contract', 'token mint', or 'token burn' must route to Web3 Auditor."""
+        queries = [
+            ("Audit token contract transfer function", "Web3 & Blockchain Security Auditor"),
+            ("Review token minting and burn logic in smart contract", "Web3 & Blockchain Security Auditor"),
+        ]
+        for query, expected_role in queries:
+            with self.subTest(query=query):
+                res = triage(query)
+                self.assertEqual(res["primary_role"], expected_role)
+
+    def test_devsecops_compound_tokens(self):
+        """DevSecOps queries with Dockerfile, docker-compose, Jenkins, or Trivy must route to DevSecOps."""
+        queries = [
+            ("Review our Dockerfile and Jenkins pipeline", "DevSecOps & Cloud Security"),
+            ("Scan docker-compose setup and run Trivy vulnerability audit", "DevSecOps & Cloud Security"),
+        ]
+        for query, expected_role in queries:
+            with self.subTest(query=query):
+                res = triage(query)
+                self.assertEqual(res["primary_role"], expected_role)
+
 
 if __name__ == "__main__":
     unittest.main()

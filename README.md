@@ -16,6 +16,7 @@
 ### Satu skill orkestrator untuk memimpin 10 divisi cyber security spesialis<br>dan 1.200+ modul keamanan enterprise langsung di AI coding assistant Anda.
 
 <p align="center">
+  <a href="https://github.com/Rey-CpuU/security/releases"><img src="https://img.shields.io/badge/Release-v2.1.1-blue.svg" alt="Release: v2.1.1"></a>
   <a href="LICENSE"><img src="https://img.shields.io/badge/License-MIT-blue.svg" alt="License: MIT"></a>
   <a href="https://github.com/Rey-CpuU/security"><img src="https://img.shields.io/badge/Platform-Antigravity%20%7C%20Claude%20Code%20%7C%20Codex-brightgreen" alt="Platform"></a>
   <a href="https://github.com/Rey-CpuU/security"><img src="https://img.shields.io/badge/Specialized%20Roles-10%20Divisions-blueviolet" alt="Specialized Roles"></a>
@@ -152,14 +153,14 @@ Topologi di bawah menunjukkan bagaimana data dan instruksi mengalir dari input a
 <pre align="center">
 ┌────────────────────────────────────────────────────────────────────────────┐
 │ LAYER 1: INPUT & CONTEXT INGESTION (SCOPED TARGETS)                        │
-│ • Web/API URL   • Git Codebase   • Solidity Contract   • Memory/PCAP Dump  │
+│ • Web/API URL   • Git Codebase   • Docker/CI Pipeline  • Smart Contract    │
 │ Peran: Menerima target & batasan scope otorisasi dari developer            │
 │ In: Prompt Instruksi & Target Scope   │ Out: Target Context Specification  │
 └─────────────────────────────────────┬──────────────────────────────────────┘
                                       │                                       
                                       ▼                                       
 ┌────────────────────────────────────────────────────────────────────────────┐
-│ LAYER 2: LEAD ARCHITECT & TRIAGE ENGINE (security_team_triage.py)          │
+│ LAYER 2: LEAD ARCHITECT & TRIAGE ENGINE (security_team_triage.py v2.1.1)   │
 │ • Keyword Regex Scoring Engine      • Technology Stack Auto-Detection      │
 │ • Lead Role Mandate Assignment      • Dynamic Sub-Skill Route Selector     │
 │ In: Target Context Specification    │ Out: Assigned Lead + Support Squad   │
@@ -261,7 +262,7 @@ Panduan lengkap penggunaan prompt siap copy-paste, disusun dari level dasar hing
 * **Kapan dipakai:** Saat mengaudit Dockerfile, manifest Kubernetes, pipeline CI/CD GitHub Actions, atau audit dependensi (SBOM).
 * **Prompt Siap Pakai:**
   ```text
-  /security-team Audit konfigurasi Dockerfile dan file .github/workflows/ di repo ini. Pastikan container berjalan sebagai non-root, tidak ada secret yang hardcoded, dan dependency tervalidasi terhadap database CVE terbaru.
+  /security-team Audit konfigurasi Dockerfile, docker-compose, dan pipeline CI/CD (GitHub Actions / Jenkins) di repo ini. Jalankan pemindaian kerentanan image dengan Trivy, pastikan container non-root, dan cegah kebocoran secret.
   ```
 * **Contoh Hasil Singkat:** Dockerfile yang telah di-hardening dengan Alpine distroless multi-stage build dan workflow GitHub Actions yang dilengkapi gitleaks scanner.
 
@@ -311,7 +312,7 @@ Panduan lengkap penggunaan prompt siap copy-paste, disusun dari level dasar hing
 * **Kapan dipakai:** Saat mengaudit smart contract Solidity, protokol DeFi, tokenomics, atau pengujian invariant fuzzing dengan Foundry.
 * **Prompt Siap Pakai:**
   ```text
-  /security-team Audit kontrak Solidity di contracts/Vault.sol. Periksa potensi reentrancy, flash loan price manipulation, dan access control flaw. Tuliskan test suite Foundry (test/Vault.t.sol) yang mendemonstrasikan eksploitasinya.
+  /security-team Audit token contract dan smart contract Solidity di contracts/Vault.sol. Periksa logika transfer, token minting/burn, potensi reentrancy, dan manipulasi flash loan. Tuliskan test suite Foundry (test/Vault.t.sol) yang mendemonstrasikan eksploitasinya.
   ```
 * **Contoh Hasil Singkat:** Laporan audit berstandar Pashov Audit Group disertai test suite Foundry yang memicu kegagalan invariant penarikan dana.
 
@@ -387,6 +388,15 @@ security-team/
 - **Security Agent Skills (78 Sub-Skills):** Scanner otonom, network recon, OSINT automation, RF hardware analysis.
 - **Masriyan Security & Cloudflare:** AI security red teaming, LLM jailbreak analysis, 6-Phase Web Assessment.
 </details>
+
+---
+
+## 📌 Riwayat Rilis & Changelog
+
+| Versi | Tipe | Tanggal | Ringkasan Perubahan |
+| :--- | :---: | :---: | :--- |
+| **v2.1.1** | 🟢 PATCH | 2026-11-06 | **Hardening Regex & Anti-False-Negative**: Menambahkan dukungan kontekstual *token contract* (`token contract`, `mint/burn`) pada divisi Web3 serta kata majemuk *DevSecOps* (`Dockerfile`, `docker-compose`, `jenkins`, `trivy`, `helm`). Menambahkan 2 unit test baru di `tests/test_triage.py` (total 12 unit tests, 100% PASS). |
+| **v2.1.0** | 🟡 MINOR | 2026-11-06 | **Rilis Stabil Perdana**: Integrasi triage engine 10 divisi cyber security, auto-detection stack teknologi, isolasi token auth (JWT/OAuth) vs crypto token, proteksi encoding terminal UTF-8, dukungan input file `-f` dan stream `sys.stdin`, diverifikasi lulus 26 skenario benchmark 4-tier. |
 
 ---
 
