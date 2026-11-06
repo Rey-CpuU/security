@@ -13,8 +13,18 @@ from typing import Dict, Any, List, Optional, Set, Callable, Awaitable
 
 from gui.server.triage_bridge import run_triage
 from gui.server.harnesses.claude_code import ClaudeCodeAdapter
+from gui.server.providers import provider_manager
 
 SETTINGS_FILE = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "settings.json"))
+
+
+def sanitize_card_for_client(card: Dict[str, Any]) -> Dict[str, Any]:
+    """Sanitize card metadata for external WebSocket and REST clients (strips agent_proxy_token)."""
+    if not isinstance(card, dict):
+        return card
+    c = dict(card)
+    c.pop("agent_proxy_token", None)
+    return c
 
 
 class OfficeStateManager:
@@ -103,6 +113,7 @@ class OfficeStateManager:
     def _load_settings(self) -> Dict[str, Any]:
         """Read settings from settings.json or return defaults."""
         defaults = {
+            "schema_version": 2,
             "default_harness": "claude_code",
             "dry_run_default": True,
             "max_parallel_agents": 2,
@@ -119,7 +130,8 @@ class OfficeStateManager:
                     "deepseek-reasoner",
                     "ollama/qwen2.5-coder:32b"
                 ]
-            }
+            },
+            "providers": {}
         }
         if os.path.isfile(SETTINGS_FILE):
             try:
@@ -127,14 +139,20 @@ class OfficeStateManager:
                     data = json.load(f)
                     if "agent_models" in data and isinstance(data["agent_models"], dict):
                         defaults["agent_models"].update(data["agent_models"])
-                    top_level = {k: v for k, v in data.items() if k != "agent_models"}
+                    if "providers" in data and isinstance(data["providers"], dict):
+                        defaults["providers"] = data["providers"]
+                    top_level = {k: v for k, v in data.items() if k not in ("agent_models", "providers")}
                     defaults.update(top_level)
             except Exception:
                 pass
+
+        if "providers" in defaults:
+            provider_manager.load_from_settings(defaults["providers"])
+
         return defaults
 
     def save_settings(self, new_settings: Dict[str, Any]) -> Dict[str, Any]:
-        """Update and persist settings with deep dictionary merge for agent_models."""
+        """Update and persist settings with deep dictionary merge for agent_models and providers."""
         if "agent_models" in new_settings and isinstance(new_settings["agent_models"], dict):
             current_models = self.settings.setdefault("agent_models", {})
             current_models.update(new_settings["agent_models"])
@@ -142,6 +160,10 @@ class OfficeStateManager:
             self.settings.update(top_level)
         else:
             self.settings.update(new_settings)
+
+        if "providers" in new_settings and isinstance(new_settings["providers"], dict):
+            self.settings["providers"] = new_settings["providers"]
+            provider_manager.load_from_settings(self.settings["providers"])
 
         self.max_parallel = int(self.settings.get("max_parallel_agents", 2))
         self.dry_run_default = bool(self.settings.get("dry_run_default", True))
@@ -184,9 +206,11 @@ class OfficeStateManager:
         return {
             "agents": self.agents,
             "office": self.office,
-            "cards": list(self.cards.values()),
+            "cards": [sanitize_card_for_client(c) for c in self.cards.values()],
             "queue": self.card_queue,
             "settings": self.settings,
+            "providers": provider_manager.to_dict(),
+            "models_catalog": provider_manager.get_all_models(),
             "active_workers_count": sum(1 for a in self.agents.values() if a["status"] in ["walking", "working", "alert"])
         }
 
@@ -195,14 +219,17 @@ class OfficeStateManager:
         title: str,
         description: str = "",
         assigned_agent: Optional[str] = None,
-        dry_run: Optional[bool] = None
+        dry_run: Optional[bool] = None,
+        model: Optional[str] = None,
+        agent_proxy_token: Optional[str] = None,
+        card_id: Optional[str] = None
     ) -> Dict[str, Any]:
         """
         Create a new task card, perform automated triage if unassigned,
         queue it, and schedule processing.
         """
         async with self.lock:
-            card_id = f"card-{uuid.uuid4().hex[:8]}"
+            resolved_card_id = card_id or f"card-{uuid.uuid4().hex[:8]}"
             if dry_run is None:
                 dry_run = self.dry_run_default
 
@@ -214,12 +241,16 @@ class OfficeStateManager:
             if not resolved_agent or resolved_agent == "auto" or resolved_agent not in self.agents:
                 resolved_agent = triage_info["recommended_agent_id"]
 
+            resolved_model = model or self.agents.get(resolved_agent, {}).get("model")
+
             card = {
-                "id": card_id,
+                "id": resolved_card_id,
                 "title": title.strip() or "Untitled Security Task",
                 "description": description.strip(),
                 "created_at": time.time(),
                 "assigned_agent": resolved_agent,
+                "model": resolved_model,
+                "agent_proxy_token": agent_proxy_token,
                 "recommended_role": triage_info["recommended_role"],
                 "recommended_skills": triage_info["primary_skills"],
                 "secondary_role": triage_info.get("secondary_role"),
@@ -230,13 +261,13 @@ class OfficeStateManager:
                 "result": None
             }
 
-            self.cards[card_id] = card
-            self.card_queue.append(card_id)
+            self.cards[resolved_card_id] = card
+            self.card_queue.append(resolved_card_id)
 
-        # Notify clients that a new card arrived at the dispenser
+        # Notify clients that a new card arrived at the dispenser (sanitized)
         await self.broadcast({
             "type": "card_added",
-            "card": card,
+            "card": sanitize_card_for_client(card),
             "sfx": "coin"
         })
 

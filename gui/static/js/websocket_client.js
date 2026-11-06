@@ -49,12 +49,37 @@ class OfficeWebSocketClient {
     return this.token;
   }
 
+  async _getTicket() {
+    try {
+      await this._ensureToken();
+      const res = await fetch("/api/auth/ws-ticket", {
+        method: "POST",
+        headers: {
+          "X-Security-Team-Token": this.token || ""
+        }
+      });
+      if (res.ok) {
+        const data = await res.json();
+        return data.ticket;
+      }
+    } catch (e) {
+      console.warn("Could not acquire ws-ticket, falling back to session token:", e);
+    }
+    return null;
+  }
+
   async _connect() {
     await this._ensureToken();
+    const ticket = await this._getTicket();
 
     const loc = window.location;
     const protocol = loc.protocol === "https:" ? "wss:" : "ws:";
-    const wsUrl = `${protocol}//${loc.host}/ws?token=${encodeURIComponent(this.token)}`;
+    let wsUrl = "";
+    if (ticket) {
+      wsUrl = `${protocol}//${loc.host}/ws?ticket=${encodeURIComponent(ticket)}`;
+    } else {
+      wsUrl = `${protocol}//${loc.host}/ws?token=${encodeURIComponent(this.token)}`;
+    }
 
     this._updateUIStatus("CONNECTING...", "#ffb000");
 
@@ -141,10 +166,20 @@ class OfficeWebSocketClient {
       if (window.taskCardsManager) window.taskCardsManager.updateCards(data.cards, data.queue);
       if (window.terminalHud) window.terminalHud.updateState(data);
 
+      if (window.modelDropdown && data.models_catalog) {
+        window.modelDropdown.setModels(data.models_catalog);
+      }
+
+      window.dispatchEvent(new CustomEvent("office_state_sync", { detail: data }));
+
       const workerBadge = document.getElementById("activeWorkersBadge");
       if (workerBadge) {
         workerBadge.textContent = `ACTIVE: ${data.active_workers_count || 0} / ${data.settings?.max_parallel_agents || 2}`;
       }
+
+    } else if (type === "dispatch_rejected") {
+      if (window.retroAudio) window.retroAudio.playAlert();
+      alert(`[DISPATCH REJECTED]\n${msg.error || "Model provider unavailable"}`);
 
     } else if (type === "terminal_log") {
       if (window.terminalHud) {

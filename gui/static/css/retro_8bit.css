@@ -210,3 +210,251 @@ body {
 ::-webkit-scrollbar-thumb:hover {
   background: var(--neon-cyan);
 }
+
+/* ==============================================================================
+   Custom 8-Bit Combobox & Gated Model Dropdown (Fase 1)
+   ============================================================================== */
+.pixel-combobox-wrapper {
+  position: relative;
+  width: 100%;
+}
+
+.pixel-combobox {
+  outline: none;
+  cursor: pointer;
+  user-select: none;
+}
+
+.pixel-combobox-trigger {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: #0b0d14;
+  border: 3px solid #000;
+  box-shadow: inset 3px 3px 0px 0px #000, inset -2px -2px 0px 0px #242938;
+  padding: 8px 10px;
+  font-family: var(--pixel-font);
+  font-size: 9px;
+  color: var(--text-main);
+}
+
+.pixel-combobox:focus .pixel-combobox-trigger,
+.pixel-combobox[aria-expanded="true"] .pixel-combobox-trigger {
+  border-color: var(--neon-cyan);
+}
+
+.combobox-status-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  display: inline-block;
+  background: #00ff66;
+  box-shadow: 0 0 4px #00ff66;
+}
+
+.combobox-selected-text {
+  flex: 1;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.combobox-caret {
+  font-size: 8px;
+  color: var(--text-dim);
+}
+
+.pixel-combobox-dropdown {
+  display: none;
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  max-height: 240px;
+  overflow-y: auto;
+  background: var(--bg-panel);
+  border: 3px solid #000;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.8), inset 2px 2px 0px 0px #2e3447;
+  z-index: 10000;
+  margin-top: 2px;
+}
+
+.pixel-combobox-dropdown.open {
+  display: block;
+}
+
+.pixel-option {
+  padding: 8px 10px;
+  font-family: var(--pixel-font);
+  font-size: 8px;
+  border-bottom: 1px solid #1c202e;
+  cursor: pointer;
+  position: relative;
+}
+
+.pixel-option:hover,
+.pixel-option.focused {
+  background: #252b3b;
+  color: var(--neon-cyan);
+}
+
+.pixel-option.selected {
+  background: #1b2838;
+  border-left: 4px solid var(--neon-cyan);
+}
+
+.pixel-option.disabled {
+  background: #0e1117;
+  color: #555e6d !important;
+  cursor: not-allowed;
+  opacity: 0.75;
+}
+
+.pixel-option.disabled:hover {
+  background: #141721;
+}
+
+.option-main-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.option-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+.option-name {
+  flex: 1;
+}
+
+.badge-tier {
+  font-size: 7px;
+  background: #1c202e;
+  color: var(--neon-amber);
+  border: 1px solid #2e3447;
+  padding: 1px 4px;
+}
+
+.pixel-lock-badge {
+  font-size: 9px;
+  margin-left: 4px;
+}
+
+.pixel-option-tooltip {
+  display: block;
+  font-size: 7px;
+  color: var(--neon-red);
+  margin-top: 4px;
+  padding-left: 14px;
+}
+
+.pixel-btn-connect {
+  font-size: 7px;
+  padding: 2px 5px;
+  background: #004422;
+  color: var(--neon-green);
+  border: 1px solid var(--neon-green);
+  cursor: pointer;
+  margin-left: auto;
+}
+
+.pixel-btn-connect:hover {
+  background: #006633;
+}
+
+/* ==============================================================================
+   Settings Modal Tabs & AI Provider Hub (Fase 1)
+   ============================================================================== */
+.settings-tab-bar {
+  display: flex;
+  gap: 6px;
+  margin-bottom: 14px;
+  border-bottom: 2px solid var(--border-inner);
+  padding-bottom: 6px;
+}
+
+.settings-tab-btn {
+  font-family: var(--pixel-font);
+  font-size: 8px;
+  padding: 6px 10px;
+  background: #181d29;
+  color: var(--text-dim);
+  border: 2px solid #000;
+  cursor: pointer;
+}
+
+.settings-tab-btn.active {
+  background: var(--neon-cyan);
+  color: #000;
+  box-shadow: 0 0 6px rgba(0, 240, 255, 0.4);
+}
+
+.provider-card {
+  margin-bottom: 12px;
+  padding: 10px;
+}
+
+.provider-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.provider-name {
+  font-size: 9px;
+  color: var(--text-main);
+  font-weight: bold;
+}
+
+.provider-strategy-selector {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.account-list {
+  background: #0b0d14;
+  border: 2px solid #000;
+  padding: 4px;
+  margin-bottom: 8px;
+}
+
+.account-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px;
+  border-bottom: 1px solid #1c202e;
+}
+
+.account-item:last-child {
+  border-bottom: none;
+}
+
+.account-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.account-label {
+  font-size: 8px;
+  color: var(--text-main);
+}
+
+.account-meta {
+  font-size: 7px;
+  color: var(--text-dim);
+}
+
+.account-actions {
+  display: flex;
+  gap: 4px;
+}
+

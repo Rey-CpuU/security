@@ -19,7 +19,7 @@ if hasattr(sys.stdout, "reconfigure"):
 if hasattr(sys.stderr, "reconfigure"):
     sys.stderr.reconfigure(encoding="utf-8", errors="replace")
 
-VERSION = "2.2.0"
+VERSION = "2.3.0"
 
 ROLE_MAPPINGS = {
     "pentest": {

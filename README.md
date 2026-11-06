@@ -16,7 +16,7 @@
 ### Satu skill orkestrator untuk memimpin 10 divisi cyber security spesialis<br>dan 1.200+ modul keamanan enterprise langsung di AI coding assistant Anda.
 
 <p align="center">
-  <a href="https://github.com/Rey-CpuU/security/releases"><img src="https://img.shields.io/badge/Release-v2.2.0-blue.svg" alt="Release: v2.2.0"></a>
+  <a href="https://github.com/Rey-CpuU/security/releases"><img src="https://img.shields.io/badge/Release-v2.3.0-blue.svg" alt="Release: v2.3.0"></a>
   <a href="LICENSE"><img src="https://img.shields.io/badge/License-MIT-blue.svg" alt="License: MIT"></a>
   <a href="https://github.com/Rey-CpuU/security"><img src="https://img.shields.io/badge/Platform-Antigravity%20%7C%20Claude%20Code%20%7C%20Codex-brightgreen" alt="Platform"></a>
   <a href="https://github.com/Rey-CpuU/security"><img src="https://img.shields.io/badge/Specialized%20Roles-10%20Divisions-blueviolet" alt="Specialized Roles"></a>
@@ -158,7 +158,7 @@ Topologi di bawah menunjukkan bagaimana data dan instruksi mengalir dari input a
 ┌────────────────────────────────────────────────────────────────────────────┐
 │ LAYER 0: USER INTERACTION & ORCHESTRATION INTERFACE                        │
 │ • CLI / Chat Prompt (/security-team)  • 8-Bit Pixel Virtual Office GUI     │
-│ • Task Card Dispatcher Desk           • Retro CRT Live Terminal HUD        │
+│ • Account Pool & Provider Auth Vault  • Retro CRT Live Terminal HUD        │
 │ In: User Target & Security Intent     │ Out: Dispatched Task Card / Prompt │
 └─────────────────────────────────────┬──────────────────────────────────────┘
                                       │                                       
@@ -172,7 +172,7 @@ Topologi di bawah menunjukkan bagaimana data dan instruksi mengalir dari input a
                                       │                                       
                                       ▼                                       
 ┌────────────────────────────────────────────────────────────────────────────┐
-│ LAYER 2: LEAD ARCHITECT & TRIAGE ENGINE (security_team_triage.py v2.2.0)   │
+│ LAYER 2: LEAD ARCHITECT & TRIAGE ENGINE (security_team_triage.py v2.3.0)   │
 │ • Keyword Regex Scoring Engine      • Technology Stack Auto-Detection      │
 │ • Lead Role Mandate Assignment      • Dynamic Sub-Skill Route Selector     │
 │ In: Target Context Specification    │ Out: Assigned Lead + Support Squad   │
@@ -407,6 +407,7 @@ security-team/
 
 | Versi | Tipe | Tanggal | Ringkasan Perubahan |
 | :--- | :---: | :---: | :--- |
+| **v2.3.0** | 🟡 MINOR | 2026-11-06 | **Enterprise Provider Hub & Account Pool (ala 9router)**: Integrasi manajemen multi-akun provider AI (Gemini/Argon, Claude, ChatGPT, Antigravity) via Windows Credential Manager (keyring), Hardened Local LLM Reverse Proxy (anti-SSRF, path allowlist, header rebuilding, token isolation), Ticket-based WebSocket auth, Backend Dispatch Gating (HTTP 403), dan Custom 8-bit ARIA Combobox dengan visual model gating (aktif vs abu-abu). |
 | **v2.2.0** | 🟡 MINOR | 2026-11-06 | **Interactive 8-Bit Cyber SOC GUI (Phase 1)**: Rilis antarmuka visual kantor virtual retro 8-bit (python gui/run.py), mini pixel agent sprites, dispatcher kartu tugas (*Task Cards*), Web Audio API chiptune SFX, keamanan anti-CSWSH (127.0.0.1, Origin check, session token handshake, dry-run default), font pixel offline bundled, dan Claude Code CLI bridge (stream-json). |
 
 | **v2.1.1** | 🟢 PATCH | 2026-11-06 | **Hardening Regex & Anti-False-Negative**: Menambahkan dukungan kontekstual *token contract* (`token contract`, `mint/burn`) pada divisi Web3 serta kata majemuk *DevSecOps* (`Dockerfile`, `docker-compose`, `jenkins`, `trivy`, `helm`). Menambahkan 2 unit test baru di `tests/test_triage.py` (total 12 unit tests, 100% PASS). |

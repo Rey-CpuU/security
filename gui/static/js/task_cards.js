@@ -92,11 +92,16 @@ class TaskCardsManager {
       window.retroAudio.playCoin();
     }
 
+    const selectedModel = (window.modelDropdown && typeof window.modelDropdown.getValue === "function") 
+      ? window.modelDropdown.getValue() 
+      : null;
+
     const payload = {
       title: title,
       description: desc,
       assigned_agent: assignedAgent === "auto" ? null : assignedAgent,
-      dry_run: dryRun
+      dry_run: dryRun,
+      model: selectedModel || undefined
     };
 
     // Use WebSocket client if connected, otherwise fallback to REST
@@ -107,11 +112,17 @@ class TaskCardsManager {
       });
     } else {
       try {
-        await fetch("/api/cards", {
+        const res = await fetch("/api/cards", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify(payload)
         });
+        if (!res.ok) {
+          const err = await res.json();
+          if (window.retroAudio) window.retroAudio.playAlert();
+          alert(`Dispatch Rejected: ${err.detail || 'Model gating blocked'}`);
+          return;
+        }
       } catch (e) {
         console.error("Failed to post card:", e);
       }

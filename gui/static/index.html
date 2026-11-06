@@ -80,6 +80,11 @@
             </div>
           </div>
 
+          <div class="task-form-group" style="margin-top: 6px;">
+            <label class="form-label">Gated AI Model Execution</label>
+            <div id="taskModelDropdownContainer"></div>
+          </div>
+
           <button id="dispatchTaskBtn" class="pixel-btn pixel-btn-primary" style="width: 100%; justify-content: center; margin-top: 4px;">
             DISPATCH TO INBOX
           </button>
@@ -119,47 +124,60 @@
         <button class="pixel-btn pixel-btn-danger" id="closeSettingsModalBtn" style="padding: 2px 6px; font-size: 8px;">X</button>
       </div>
 
-      <div class="task-form-group">
-        <label class="form-label" for="modelPentest">Rex (Penetration Tester) AI Model</label>
-        <input type="text" id="modelPentest" list="customModelsList" class="pixel-input">
+      <div class="settings-tab-bar">
+        <button class="settings-tab-btn active" id="tabGeneralBtn" type="button">OPERATIVE ROLES</button>
+        <button class="settings-tab-btn" id="tabProvidersBtn" type="button">AI PROVIDERS & ACCOUNTS</button>
       </div>
 
-      <div class="task-form-group">
-        <label class="form-label" for="modelAppsec">Ada (AppSec Engineer) AI Model</label>
-        <input type="text" id="modelAppsec" list="customModelsList" class="pixel-input">
-      </div>
-
-      <div class="task-form-group">
-        <label class="form-label" for="modelDevsecops">Gears (DevSecOps) AI Model</label>
-        <input type="text" id="modelDevsecops" list="customModelsList" class="pixel-input">
-      </div>
-
-      <datalist id="customModelsList">
-        <option value="claude-3-7-sonnet-20250219">
-        <option value="claude-3-5-sonnet-20241022">
-        <option value="gpt-4.5-preview">
-        <option value="gpt-4o">
-        <option value="gemini-2.0-flash">
-        <option value="deepseek-reasoner">
-        <option value="ollama/qwen2.5-coder:32b">
-      </datalist>
-
-      <div class="task-form-group form-row" style="margin-top: 10px;">
-        <div style="flex: 1;">
-          <label class="form-label" for="maxParallelInput">Max Parallel Workers</label>
-          <input type="number" id="maxParallelInput" min="1" max="4" value="2" class="pixel-input">
+      <div id="tabContentGeneral">
+        <div class="task-form-group">
+          <label class="form-label" for="modelPentest">Rex (Penetration Tester) AI Model</label>
+          <input type="text" id="modelPentest" list="customModelsList" class="pixel-input">
         </div>
-        <div style="flex: 1; padding-top: 14px;">
-          <label class="dry-run-toggle">
-            <input type="checkbox" id="settingsDryRunDefault" checked>
-            <span>DRY-RUN DEFAULT</span>
-          </label>
+
+        <div class="task-form-group">
+          <label class="form-label" for="modelAppsec">Ada (AppSec Engineer) AI Model</label>
+          <input type="text" id="modelAppsec" list="customModelsList" class="pixel-input">
+        </div>
+
+        <div class="task-form-group">
+          <label class="form-label" for="modelDevsecops">Gears (DevSecOps) AI Model</label>
+          <input type="text" id="modelDevsecops" list="customModelsList" class="pixel-input">
+        </div>
+
+        <datalist id="customModelsList">
+          <option value="claude-3-7-sonnet-20250219">
+          <option value="claude-3-5-sonnet-20241022">
+          <option value="gpt-4.5-preview">
+          <option value="gpt-4o">
+          <option value="gemini-2.0-flash">
+          <option value="deepseek-reasoner">
+          <option value="ollama/qwen2.5-coder:32b">
+        </datalist>
+
+        <div class="task-form-group form-row" style="margin-top: 10px;">
+          <div style="flex: 1;">
+            <label class="form-label" for="maxParallelInput">Max Parallel Workers</label>
+            <input type="number" id="maxParallelInput" min="1" max="4" value="2" class="pixel-input">
+          </div>
+          <div style="flex: 1; padding-top: 14px;">
+            <label class="dry-run-toggle">
+              <input type="checkbox" id="settingsDryRunDefault" checked>
+              <span>DRY-RUN DEFAULT</span>
+            </label>
+          </div>
+        </div>
+
+        <div style="margin-top: 16px; display: flex; justify-content: flex-end; gap: 8px;">
+          <button class="pixel-btn" id="cancelSettingsBtn">CANCEL</button>
+          <button class="pixel-btn pixel-btn-primary" id="saveSettingsBtn">SAVE CONFIG</button>
         </div>
       </div>
 
-      <div style="margin-top: 16px; display: flex; justify-content: flex-end; gap: 8px;">
-        <button class="pixel-btn" id="cancelSettingsBtn">CANCEL</button>
-        <button class="pixel-btn pixel-btn-primary" id="saveSettingsBtn">SAVE CONFIG</button>
+      <div id="tabContentProviders" style="display: none;">
+        <div id="providersListContainer">
+          <!-- Rendered by ProviderManagerUI -->
+        </div>
       </div>
     </div>
   </div>
@@ -168,6 +186,8 @@
   <script src="/static/js/audio_synth.js"></script>
   <script src="/static/js/agent_sprites.js"></script>
   <script src="/static/js/office_canvas.js"></script>
+  <script src="/static/js/custom_dropdown.js"></script>
+  <script src="/static/js/provider_manager.js"></script>
   <script src="/static/js/task_cards.js"></script>
   <script src="/static/js/terminal_hud.js"></script>
   <script src="/static/js/websocket_client.js"></script>
@@ -182,6 +202,11 @@
         this.cancelBtn = document.getElementById("cancelSettingsBtn");
         this.saveBtn = document.getElementById("saveSettingsBtn");
         
+        this.tabGeneralBtn = document.getElementById("tabGeneralBtn");
+        this.tabProvidersBtn = document.getElementById("tabProvidersBtn");
+        this.contentGeneral = document.getElementById("tabContentGeneral");
+        this.contentProviders = document.getElementById("tabContentProviders");
+
         this.inputPentest = document.getElementById("modelPentest");
         this.inputAppsec = document.getElementById("modelAppsec");
         this.inputDevsecops = document.getElementById("modelDevsecops");
@@ -196,6 +221,13 @@
         if (this.closeBtn) this.closeBtn.addEventListener("click", () => this.close());
         if (this.cancelBtn) this.cancelBtn.addEventListener("click", () => this.close());
         if (this.saveBtn) this.saveBtn.addEventListener("click", () => this.save());
+
+        if (this.tabGeneralBtn) {
+          this.tabGeneralBtn.addEventListener("click", () => this.switchTab("general"));
+        }
+        if (this.tabProvidersBtn) {
+          this.tabProvidersBtn.addEventListener("click", () => this.switchTab("providers"));
+        }
 
         const sfxBtn = document.getElementById("sfxToggleBtn");
         if (sfxBtn) {
@@ -213,6 +245,29 @@
             if (window.terminalHud) window.terminalHud.clear();
           });
         }
+      }
+
+      switchTab(tab) {
+        if (window.retroAudio) window.retroAudio.playBleep(480, 0.03);
+        if (tab === "general") {
+          this.tabGeneralBtn.classList.add("active");
+          this.tabProvidersBtn.classList.remove("active");
+          this.contentGeneral.style.display = "block";
+          this.contentProviders.style.display = "none";
+        } else {
+          this.tabGeneralBtn.classList.remove("active");
+          this.tabProvidersBtn.classList.add("active");
+          this.contentGeneral.style.display = "none";
+          this.contentProviders.style.display = "block";
+          if (window.providerManager) {
+            window.providerManager.load();
+          }
+        }
+      }
+
+      openProviderTab(providerName) {
+        this.open();
+        this.switchTab("providers");
       }
 
       async open() {
@@ -267,6 +322,22 @@
 
     document.addEventListener("DOMContentLoaded", () => {
       window.settingsModal = new SettingsModalController();
+      window.providerManager = new ProviderManagerUI("providersListContainer");
+      
+      const modelDropdownEl = document.getElementById("taskModelDropdownContainer");
+      if (modelDropdownEl) {
+        window.modelDropdown = new RetroCustomDropdown(modelDropdownEl, {
+          initialValue: "claude-3-7-sonnet-20250219"
+        });
+        fetch("/api/providers")
+          .then(res => res.json())
+          .then(data => {
+            if (data.models && window.modelDropdown) {
+              window.modelDropdown.setModels(data.models);
+            }
+          })
+          .catch(() => {});
+      }
     });
   </script>
 </body>
