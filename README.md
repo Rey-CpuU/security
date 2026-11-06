@@ -52,7 +52,7 @@ Berikut adalah simulasi alur eksekusi saat developer meminta bantuan perbaikan c
 │                          (Terbukti data admin bocor ke user biasa!)        │
 │                                                                            │
 │ 🛡️ [PHASE 3: ZERO FALSE-POSITIVE VERIFICATION (fp-check)]                  │
-│    ├─ Step 1 (Dataflow): Source 'user_id' mengalir ke SQL sink tanpa filte │
+│    ├─ Step 1 (Dataflow): Source 'user_id' mengalir ke SQL sink tanpa filter│
 │    ├─ Step 2 (Bounds)  : Attacker non-privileged mampu melewati boundary   │
 │    ├─ Step 3 (Harness) : Automated exploit execution berhasil 10/10 run    │
 │    └─ Verifikasi Akhir : [VERIFIED EXPLOITABLE] (False-Positive: 0%)       │
@@ -91,16 +91,16 @@ Berikut adalah simulasi alur eksekusi saat developer meminta bantuan perbaikan c
 
 | No | Fitur / Divisi Keamanan | Deskripsi Singkat | Modul Inti |
 | :---: | :--- | :--- | :--- |
-| **01** | **Web & API Penetration Testing** | Audit kerentanan OWASP Top 10, REST/GraphQL, dan bypass WAF. | `09-web-security`, `api-testing` |
-| **02** | **AppSec & Invariant Patching** | Analisis SAST sumber kode dan penambalan bug berbasis invariant fix. | `fp-check`, `implement-patch` |
-| **03** | **DevSecOps & Cloud Hardening** | Audit postur CI/CD, scanning container Docker/K8s, dan kepatuhan SBOM. | `10-cloud-security`, `trivy` |
-| **04** | **Blue Team & SOC Engineering** | Pembuatan aturan deteksi SIEM (Sigma), YARA, dan otomatisasi triage alert. | `11-csoc-automation`, `sigma` |
-| **05** | **Threat Intel & Threat Hunting** | Pemetaan taktik ancaman MITRE ATT&CK dan ekstraksi indikator IOC. | `06-threat-hunting`, `misp` |
-| **06** | **DFIR & Malware Analysis** | Investigasi forensik disk, memory dump (KAPE/Volatility), dan reverse malware. | `04-reverse-eng`, `05-malware` |
-| **07** | **Red Team & Adversary Simulation** | Simulasi serangan Active Directory, Kerberoasting, dan pengujian C2. | `14-red-team-ops`, `bloodhound` |
-| **08** | **Web3 & Smart Contract Audit** | Audit kontrak Solidity, DeFi attack simulation, dan invariant fuzzing. | `contract-auditor`, `pashov` |
-| **09** | **AI & LLM Red Teaming** | Uji ketahanan model terhadap prompt injection, jailbreak, dan data poisoning.| `continuous-llm-red-teaming` |
-| **10** | **Purple Team & Governance (CISO)** | Evaluasi risiko komprehensif, maturitas NIST/ISO 27001, dan CISO board deck. | `cybersecurity-pro`, `grc` |
+| **01** | **Web & API Penetration Testing** | Audit kerentanan OWASP Top 10, REST/GraphQL, validasi token, dan bypass WAF. | `web-app-pentest`, `api-security-testing`, `02-vulnerability-scanner` |
+| **02** | **Red Team & Adversary Simulation** | Simulasi serangan Active Directory, Kerberoasting, privilege escalation, dan C2. | `14-red-team-ops`, `exploiting-active-directory-with-bloodhound` |
+| **03** | **AppSec & Invariant Patching** | Analisis SAST sumber kode (Semgrep/CodeQL) dan penambalan bug invariant fix. | `fp-check`, `semgrep`, `codeql`, `implement-patch` |
+| **04** | **Blue Team & SOC Engineering** | Pembuatan aturan deteksi SIEM (Sigma), YARA, dan otomatisasi triage alert CSOC. | `11-csoc-automation`, `building-detection-rules-with-sigma`, `yara` |
+| **05** | **DevSecOps & Cloud Hardening** | Audit postur CI/CD, scanning container Docker/K8s, dan verifikasi SBOM/SLSA. | `10-cloud-security`, `container-hardening`, `supply-chain-risk-auditor` |
+| **06** | **DFIR & Malware Analysis** | Investigasi forensik disk, memory dump (KAPE/Volatility), dan reverse malware. | `04-reverse-engineering`, `05-malware-analysis`, `forensics-triage` |
+| **07** | **Threat Intel & Threat Hunting** | Pemetaan taktik ancaman MITRE ATT&CK, korelasi MISP, dan ekstraksi indikator IOC. | `06-threat-hunting`, `threat-intelligence`, `threat-intel-fusion` |
+| **08** | **Web3 & Smart Contract Audit** | Audit kontrak Solidity, invariant fuzzing (Foundry/Fizz), dan DeFi exploit triage. | `contract-auditor`, `solidity-auditor`, `fizz`, `dimensional-analysis` |
+| **09** | **AI & LLM Red Teaming** | Uji ketahanan model terhadap prompt injection, jailbreak, dan agent tool poisoning.| `ai-redteam`, `16-ai-llm-security`, `agentic-actions-auditor` |
+| **10** | **Purple Team & Governance (CISO)** | Evaluasi risiko komprehensif, kepatuhan NIST CSF / ISO 27001, dan CISO board deck. | `cybersecurity-pro`, `19-grc-compliance`, `22-purple-team` |
 
 ---
 
@@ -109,11 +109,14 @@ Berikut adalah simulasi alur eksekusi saat developer meminta bantuan perbaikan c
 Mulai gunakan `security-team` dalam 3 langkah mudah:
 
 ```bash
-# 1. Clone repositori ke direktori workspace lokal Anda
+# 1. Clone repositori ke workspace lokal Anda
 git clone https://github.com/Rey-CpuU/security.git
 
-# 2. Salin folder skill ke direktori agent Antigravity / Claude Code
-cp -r security/skills/security-team ~/.gemini/config/skills/
+# 2. Salin folder skill ke direktori agent Antigravity / Claude Code:
+# Linux / macOS / Bash:
+cp -r security/ ~/.gemini/config/skills/security-team/
+# Windows PowerShell:
+Copy-Item -Recurse security/ ~/.gemini/config/skills/security-team/
 
 # 3. Jalankan audit pertama Anda di chat coding assistant
 /security-team Audit keamanan repository ini dan cari potensi kebocoran rahasia
@@ -336,15 +339,15 @@ Panduan lengkap penggunaan prompt siap copy-paste, disusun dari level dasar hing
 
 ### 📋 Tabel Ringkasan Prompt Cepat
 
-| Fitur | Shortcut Prompt Rekomendasi |
+| Fitur / Divisi | Shortcut Prompt Rekomendasi |
 | :--- | :--- |
 | **01. Pentest Web/API** | `/security-team Pentest endpoint API ini dan buat PoC curl untuk verifikasi celah.` |
-| **02. AppSec Patching** | `/security-team Audit kode ini dan berikan invariant patch (git diff) bebas regresi.` |
-| **03. DevSecOps** | `/security-team Hardening Dockerfile dan audit pipeline CI/CD GitHub Actions ini.` |
+| **02. Red Team Ops** | `/security-team Analisis attack path Active Directory dan simulasikan lateral movement.` |
+| **03. AppSec Patching** | `/security-team Audit kode ini dan berikan invariant patch (git diff) bebas regresi.` |
 | **04. Blue Team / SOC** | `/security-team Buatkan aturan deteksi Sigma YAML dan YARA untuk indikator ancaman ini.` |
-| **05. Threat Hunting** | `/security-team Ekstrak IOC dari log ini dan petakan ke matriks taktik MITRE ATT&CK.` |
+| **05. DevSecOps** | `/security-team Hardening Dockerfile dan audit pipeline CI/CD GitHub Actions ini.` |
 | **06. DFIR Forensics** | `/security-team Rekonstruksi timeline insiden dan identifikasi jejak artefak penyerang.` |
-| **07. Red Team Ops** | `/security-team Analisis attack path Active Directory dan simulasikan lateral movement.` |
+| **07. Threat Hunting** | `/security-team Ekstrak IOC dari log ini dan petakan ke matriks taktik MITRE ATT&CK.` |
 | **08. Web3 Solidity** | `/security-team Audit kontrak Solidity ini dan tuliskan suite test exploitasi Foundry.` |
 | **09. AI Red Team** | `/security-team Uji ketahanan model LLM terhadap serangan indirect prompt injection.` |
 | **10. CISO Governance** | `/security-team Buatkan CISO Executive Summary lengkap dengan Risk Matrix dan roadmap remediasi.` |
@@ -355,10 +358,23 @@ Panduan lengkap penggunaan prompt siap copy-paste, disusun dari level dasar hing
 
 ```text
 security-team/
-├── SKILL.md                          # Panduan orkestrasi 10 divisi & protokol fp-check
-├── README.md                         # Dokumentasi arsitektur, panduan, dan quick start
-└── scripts/
-    └── security_team_triage.py       # Engine triage otomatis: scoring regex & routing role
+├── SKILL.md                          # Spesifikasi orkestrasi 10 divisi & protokol fp-check
+├── README.md                         # Dokumentasi arsitektur, panduan prompt, dan quick start
+├── LICENSE                           # Lisensi open-source MIT
+├── .gitignore                        # Konfigurasi proteksi file sensitif & cache
+├── scripts/
+│   └── security_team_triage.py       # Engine triage CLI/API otomatis: regex scoring & routing
+├── references/                       # 8 Playbook & Panduan Operasional Lengkap:
+│   ├── role-descriptions.md          # Spesifikasi detail 10 persona divisi keamanan
+│   ├── pentest-team-playbook.md      # Metodologi 6 fase web/API/network pentest
+│   ├── web3-smart-contract-playbook.md# Invariant fuzzing, DeFi exploits, scaling WAD/RAY
+│   ├── ai-llm-redteam-playbook.md    # Jailbreak, prompt injection, tool poisoning
+│   ├── purple-team-playbook.md       # Kolaborasi red/blue team & tuning deteksi
+│   ├── engagement-types.md           # Model keterlibatan audit & matriks scope
+│   ├── escalation-procedures.md      # Prosedur eskalasi insiden & handoff kritis
+│   └── security-report-templates.md  # Template laporan CISO Board & temuan teknis
+└── tests/
+    └── test_triage.py                # Test suite otomatis (schema, edge cases, 10 divisi)
 ```
 
 <details>
