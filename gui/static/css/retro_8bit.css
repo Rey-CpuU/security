@@ -1,0 +1,212 @@
+/* ==============================================================================
+   8-Bit Cyber Operations Office - Retro CRT & Pixel Theme (100% Offline)
+   ============================================================================== */
+
+@font-face {
+  font-family: 'PressStart2P';
+  src: url('/static/fonts/press_start_2p.woff') format('woff'),
+       url('/static/fonts/press_start_2p.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+:root {
+  --bg-dark: #0a0c10;
+  --bg-panel: #141721;
+  --bg-card: #1c202e;
+  --border-outer: #000000;
+  --border-inner: #2e3447;
+  --border-highlight: #4c566a;
+  
+  --neon-green: #00ff66;
+  --neon-cyan: #00f0ff;
+  --neon-amber: #ffb000;
+  --neon-red: #ff3366;
+  --neon-purple: #bd93f9;
+  
+  --text-main: #eceff4;
+  --text-dim: #7b889b;
+  --text-terminal: #00ff66;
+  
+  --pixel-font: 'PressStart2P', 'Silkscreen', 'Courier New', monospace;
+}
+
+/* Base Reset & Pixel Rendering */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  image-rendering: pixelated;
+  image-rendering: crisp-edges;
+  -webkit-font-smoothing: none;
+}
+
+body {
+  background-color: var(--bg-dark);
+  color: var(--text-main);
+  font-family: var(--pixel-font);
+  font-size: 11px;
+  line-height: 1.5;
+  overflow: hidden;
+  height: 100vh;
+  width: 100vw;
+  user-select: none;
+}
+
+/* CRT Scanlines Overlay */
+.crt-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    rgba(18, 16, 16, 0) 50%, 
+    rgba(0, 0, 0, 0.25) 50%
+  );
+  background-size: 100% 4px;
+  pointer-events: none;
+  z-index: 9999;
+  opacity: 0.7;
+}
+
+/* Subtle CRT Screen Vignette */
+.crt-overlay::after {
+  content: " ";
+  display: block;
+  position: absolute;
+  top: 0; left: 0; bottom: 0; right: 0;
+  background: radial-gradient(circle at center, transparent 65%, rgba(0, 0, 0, 0.6) 100%);
+  pointer-events: none;
+}
+
+/* Retro Pixel Borders */
+.pixel-box {
+  background: var(--bg-panel);
+  border: 4px solid var(--border-outer);
+  box-shadow: 
+    inset -4px -4px 0px 0px #0b0d14,
+    inset 4px 4px 0px 0px var(--border-inner);
+  position: relative;
+}
+
+.pixel-box-green {
+  box-shadow: 
+    inset -4px -4px 0px 0px #003311,
+    inset 4px 4px 0px 0px var(--neon-green);
+}
+
+.pixel-box-red {
+  box-shadow: 
+    inset -4px -4px 0px 0px #330011,
+    inset 4px 4px 0px 0px var(--neon-red);
+}
+
+.pixel-box-cyan {
+  box-shadow: 
+    inset -4px -4px 0px 0px #002233,
+    inset 4px 4px 0px 0px var(--neon-cyan);
+}
+
+/* Retro Buttons */
+.pixel-btn {
+  font-family: var(--pixel-font);
+  font-size: 10px;
+  padding: 8px 14px;
+  background: #252b3b;
+  color: #fff;
+  border: 3px solid #000;
+  box-shadow: 
+    inset -3px -3px 0px 0px #11141c,
+    inset 3px 3px 0px 0px #434c62;
+  cursor: pointer;
+  text-transform: uppercase;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  transition: none;
+}
+
+.pixel-btn:hover {
+  background: #31394d;
+  color: var(--neon-cyan);
+}
+
+.pixel-btn:active {
+  box-shadow: 
+    inset 3px 3px 0px 0px #11141c,
+    inset -3px -3px 0px 0px #434c62;
+  transform: translateY(2px);
+}
+
+.pixel-btn-primary {
+  background: #008844;
+  color: #ffffff;
+  box-shadow: 
+    inset -3px -3px 0px 0px #004422,
+    inset 3px 3px 0px 0px var(--neon-green);
+}
+.pixel-btn-primary:hover {
+  background: #00aa55;
+  color: #fff;
+}
+
+.pixel-btn-danger {
+  background: #881122;
+  color: #ffffff;
+  box-shadow: 
+    inset -3px -3px 0px 0px #440011,
+    inset 3px 3px 0px 0px var(--neon-red);
+}
+.pixel-btn-danger:hover {
+  background: #aa1133;
+}
+
+/* Pixel Input / Select */
+.pixel-input, .pixel-select, .pixel-textarea {
+  font-family: var(--pixel-font);
+  font-size: 10px;
+  padding: 8px;
+  background: #0b0d14;
+  color: var(--text-main);
+  border: 3px solid #000;
+  box-shadow: 
+    inset 3px 3px 0px 0px #000,
+    inset -2px -2px 0px 0px #242938;
+  outline: none;
+  width: 100%;
+}
+
+.pixel-input:focus, .pixel-select:focus, .pixel-textarea:focus {
+  border-color: var(--neon-cyan);
+}
+
+/* Retro Badges */
+.pixel-badge {
+  display: inline-block;
+  padding: 2px 6px;
+  font-size: 8px;
+  border: 2px solid #000;
+  text-transform: uppercase;
+}
+
+.badge-green { background: #004422; color: var(--neon-green); }
+.badge-red { background: #440011; color: var(--neon-red); }
+.badge-cyan { background: #003344; color: var(--neon-cyan); }
+.badge-amber { background: #443300; color: var(--neon-amber); }
+.badge-purple { background: #331144; color: var(--neon-purple); }
+
+/* Custom Pixel Scrollbars */
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+  background: #0b0d14;
+}
+::-webkit-scrollbar-thumb {
+  background: #3b4252;
+  border: 2px solid #000;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--neon-cyan);
+}

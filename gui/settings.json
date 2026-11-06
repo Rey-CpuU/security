@@ -1,0 +1,19 @@
+{
+  "default_harness": "claude_code",
+  "dry_run_default": true,
+  "max_parallel_agents": 2,
+  "agent_models": {
+    "pentest": "custom-claude-test-model",
+    "appsec": "claude-3-5-sonnet-20241022",
+    "devsecops": "gpt-4o",
+    "custom_models_list": [
+      "claude-3-7-sonnet-20250219",
+      "claude-3-5-sonnet-20241022",
+      "gpt-4.5-preview",
+      "gpt-4o",
+      "gemini-2.0-flash",
+      "deepseek-reasoner",
+      "ollama/qwen2.5-coder:32b"
+    ]
+  }
+}

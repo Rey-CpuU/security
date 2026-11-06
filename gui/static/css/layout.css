@@ -1,0 +1,275 @@
+/* ==============================================================================
+   8-Bit Cyber Operations Office - Layout & Grid Structure
+   ============================================================================== */
+
+.app-wrapper {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  width: 100vw;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Header Bar */
+.top-nav {
+  height: 48px;
+  background: var(--bg-panel);
+  border-bottom: 4px solid #000;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 16px;
+  z-index: 10;
+}
+
+.brand-title {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 13px;
+  color: var(--neon-cyan);
+  text-shadow: 2px 2px 0px #000;
+}
+
+.brand-status-dot {
+  width: 10px;
+  height: 10px;
+  background: var(--neon-green);
+  border: 2px solid #000;
+  animation: pulse-dot 1.5s infinite;
+}
+
+@keyframes pulse-dot {
+  0% { opacity: 1; }
+  50% { opacity: 0.3; }
+  100% { opacity: 1; }
+}
+
+.nav-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+/* Main Content Workspace */
+.main-layout {
+  flex: 1;
+  display: grid;
+  grid-template-columns: 1fr 440px;
+  overflow: hidden;
+  position: relative;
+}
+
+/* Left Canvas Panel */
+.office-viewport {
+  display: flex;
+  flex-direction: column;
+  background: #090b10;
+  border-right: 4px solid #000;
+  position: relative;
+  overflow: hidden;
+}
+
+.canvas-container {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  background: #0d0f18;
+}
+
+#officeCanvas {
+  background: #111420;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.8);
+  image-rendering: pixelated;
+  image-rendering: crisp-edges;
+  max-width: 100%;
+  max-height: 100%;
+  aspect-ratio: 4 / 3;
+  object-fit: contain;
+}
+
+.canvas-ticker {
+  height: 28px;
+  background: #050608;
+  border-top: 3px solid #000;
+  display: flex;
+  align-items: center;
+  padding: 0 12px;
+  font-size: 9px;
+  color: var(--neon-amber);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Right Sidebar HUD */
+.sidebar-hud {
+  display: flex;
+  flex-direction: column;
+  background: var(--bg-panel);
+  overflow-y: auto;
+  border-left: 2px solid var(--border-inner);
+}
+
+.hud-section {
+  padding: 12px;
+  border-bottom: 3px solid #000;
+}
+
+.section-header {
+  font-size: 11px;
+  color: var(--neon-cyan);
+  margin-bottom: 8px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  text-transform: uppercase;
+}
+
+/* Dispatcher Card Form */
+.task-form-group {
+  margin-bottom: 8px;
+}
+
+.form-label {
+  display: block;
+  font-size: 8px;
+  color: var(--text-dim);
+  margin-bottom: 4px;
+  text-transform: uppercase;
+}
+
+.form-row {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.dry-run-toggle {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 9px;
+  color: var(--neon-green);
+  cursor: pointer;
+}
+
+/* Queue List */
+.queue-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  max-height: 180px;
+  overflow-y: auto;
+}
+
+.task-card-item {
+  background: var(--bg-card);
+  border: 2px solid #000;
+  padding: 8px;
+  position: relative;
+  cursor: pointer;
+}
+
+.task-card-item:hover {
+  border-color: var(--neon-cyan);
+}
+
+.card-item-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 4px;
+}
+
+.card-title {
+  font-size: 9px;
+  color: #fff;
+  font-weight: bold;
+}
+
+.card-meta {
+  font-size: 8px;
+  color: var(--text-dim);
+  display: flex;
+  gap: 8px;
+}
+
+/* Terminal & Tabs */
+.terminal-deck {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-height: 240px;
+  background: #05070a;
+  padding: 8px;
+}
+
+.terminal-tabs {
+  display: flex;
+  gap: 4px;
+  margin-bottom: 6px;
+  border-bottom: 2px solid #1a2030;
+  padding-bottom: 4px;
+}
+
+.tab-btn {
+  font-family: var(--pixel-font);
+  font-size: 8px;
+  background: #111420;
+  color: var(--text-dim);
+  border: 2px solid #000;
+  padding: 4px 8px;
+  cursor: pointer;
+}
+
+.tab-btn.active {
+  background: #1e2638;
+  color: var(--neon-green);
+  border-color: var(--neon-green);
+}
+
+.terminal-screen {
+  flex: 1;
+  background: #020305;
+  border: 2px solid #000;
+  padding: 8px;
+  font-family: 'Courier New', monospace;
+  font-size: 10px;
+  color: var(--neon-green);
+  overflow-y: auto;
+  max-height: 260px;
+  line-height: 1.4;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+.log-thought { color: #88c0d0; }
+.log-tool { color: #ebcb8b; }
+.log-output { color: #a3be8c; }
+.log-alert { color: #bf616a; font-weight: bold; }
+.log-status { color: #b48ead; }
+
+/* Settings Modal */
+.modal-overlay {
+  position: fixed;
+  top: 0; left: 0; width: 100vw; height: 100vh;
+  background: rgba(0, 0, 0, 0.75);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 10000;
+}
+
+.modal-overlay.active {
+  display: flex;
+}
+
+.settings-modal-card {
+  width: 520px;
+  max-width: 90vw;
+  padding: 16px;
+}

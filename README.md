@@ -16,7 +16,7 @@
 ### Satu skill orkestrator untuk memimpin 10 divisi cyber security spesialis<br>dan 1.200+ modul keamanan enterprise langsung di AI coding assistant Anda.
 
 <p align="center">
-  <a href="https://github.com/Rey-CpuU/security/releases"><img src="https://img.shields.io/badge/Release-v2.1.1-blue.svg" alt="Release: v2.1.1"></a>
+  <a href="https://github.com/Rey-CpuU/security/releases"><img src="https://img.shields.io/badge/Release-v2.2.0-blue.svg" alt="Release: v2.2.0"></a>
   <a href="LICENSE"><img src="https://img.shields.io/badge/License-MIT-blue.svg" alt="License: MIT"></a>
   <a href="https://github.com/Rey-CpuU/security"><img src="https://img.shields.io/badge/Platform-Antigravity%20%7C%20Claude%20Code%20%7C%20Codex-brightgreen" alt="Platform"></a>
   <a href="https://github.com/Rey-CpuU/security"><img src="https://img.shields.io/badge/Specialized%20Roles-10%20Divisions-blueviolet" alt="Specialized Roles"></a>
@@ -121,6 +121,10 @@ Copy-Item -Recurse security/ ~/.gemini/config/skills/security-team/
 
 # 3. Jalankan audit pertama Anda di chat coding assistant
 /security-team Audit keamanan repository ini dan cari potensi kebocoran rahasia
+
+# 4. (Opsional) Jalankan GUI Kantor Virtual 8-Bit Interaktif:
+pip install -r gui/requirements.txt
+python gui/run.py
 ```
 
 ---
@@ -152,6 +156,14 @@ Topologi di bawah menunjukkan bagaimana data dan instruksi mengalir dari input a
 
 <pre align="center">
 ┌────────────────────────────────────────────────────────────────────────────┐
+│ LAYER 0: USER INTERACTION & ORCHESTRATION INTERFACE                        │
+│ • CLI / Chat Prompt (/security-team)  • 8-Bit Pixel Virtual Office GUI     │
+│ • Task Card Dispatcher Desk           • Retro CRT Live Terminal HUD        │
+│ In: User Target & Security Intent     │ Out: Dispatched Task Card / Prompt │
+└─────────────────────────────────────┬──────────────────────────────────────┘
+                                      │                                       
+                                      ▼                                       
+┌────────────────────────────────────────────────────────────────────────────┐
 │ LAYER 1: INPUT & CONTEXT INGESTION (SCOPED TARGETS)                        │
 │ • Web/API URL   • Git Codebase   • Docker/CI Pipeline  • Smart Contract    │
 │ Peran: Menerima target & batasan scope otorisasi dari developer            │
@@ -160,7 +172,7 @@ Topologi di bawah menunjukkan bagaimana data dan instruksi mengalir dari input a
                                       │                                       
                                       ▼                                       
 ┌────────────────────────────────────────────────────────────────────────────┐
-│ LAYER 2: LEAD ARCHITECT & TRIAGE ENGINE (security_team_triage.py v2.1.1)   │
+│ LAYER 2: LEAD ARCHITECT & TRIAGE ENGINE (security_team_triage.py v2.2.0)   │
 │ • Keyword Regex Scoring Engine      • Technology Stack Auto-Detection      │
 │ • Lead Role Mandate Assignment      • Dynamic Sub-Skill Route Selector     │
 │ In: Target Context Specification    │ Out: Assigned Lead + Support Squad   │
@@ -395,6 +407,8 @@ security-team/
 
 | Versi | Tipe | Tanggal | Ringkasan Perubahan |
 | :--- | :---: | :---: | :--- |
+| **v2.2.0** | 🟡 MINOR | 2026-11-06 | **Interactive 8-Bit Cyber SOC GUI (Phase 1)**: Rilis antarmuka visual kantor virtual retro 8-bit (python gui/run.py), mini pixel agent sprites, dispatcher kartu tugas (*Task Cards*), Web Audio API chiptune SFX, keamanan anti-CSWSH (127.0.0.1, Origin check, session token handshake, dry-run default), font pixel offline bundled, dan Claude Code CLI bridge (stream-json). |
+
 | **v2.1.1** | 🟢 PATCH | 2026-11-06 | **Hardening Regex & Anti-False-Negative**: Menambahkan dukungan kontekstual *token contract* (`token contract`, `mint/burn`) pada divisi Web3 serta kata majemuk *DevSecOps* (`Dockerfile`, `docker-compose`, `jenkins`, `trivy`, `helm`). Menambahkan 2 unit test baru di `tests/test_triage.py` (total 12 unit tests, 100% PASS). |
 | **v2.1.0** | 🟡 MINOR | 2026-11-06 | **Rilis Stabil Perdana**: Integrasi triage engine 10 divisi cyber security, auto-detection stack teknologi, isolasi token auth (JWT/OAuth) vs crypto token, proteksi encoding terminal UTF-8, dukungan input file `-f` dan stream `sys.stdin`, diverifikasi lulus 26 skenario benchmark 4-tier. |
 

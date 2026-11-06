@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="session-token" content="__SESSION_TOKEN__">
+  <title>8-Bit Cyber Operations Office</title>
+  
+  <!-- Retro Stylesheets (100% Local & Offline) -->
+  <link rel="stylesheet" href="/static/css/retro_8bit.css">
+  <link rel="stylesheet" href="/static/css/layout.css">
+</head>
+<body>
+  <!-- Retro CRT Scanline & Screen Vignette Overlay -->
+  <div class="crt-overlay"></div>
+
+  <div class="app-wrapper">
+    <!-- Top Navigation Header -->
+    <header class="top-nav">
+      <div class="brand-title">
+        <span class="brand-status-dot" id="connectionStatusDot"></span>
+        <span>🕹️ 8-BIT CYBER OPERATIONS OFFICE</span>
+        <span class="pixel-badge badge-green" id="connectionStatusText">INITIALIZING...</span>
+      </div>
+
+      <div class="nav-actions">
+        <span class="pixel-badge badge-cyan" id="activeWorkersBadge">ACTIVE: 0 / 2</span>
+        <button class="pixel-btn" id="sfxToggleBtn" title="Toggle 8-Bit Chiptune SFX">🔊 SFX: ON</button>
+        <button class="pixel-btn" id="openSettingsBtn">⚙️ SETTINGS</button>
+      </div>
+    </header>
+
+    <!-- Main Office & HUD Grid -->
+    <main class="main-layout">
+      <!-- Left: 8-Bit Virtual Office Viewport -->
+      <section class="office-viewport">
+        <div class="canvas-container">
+          <canvas id="officeCanvas"></canvas>
+        </div>
+        <div class="canvas-ticker" id="officeTicker">
+          <span>&gt; [CYBER_OPS] Standby. Click any operative or dispenser to inspect. Auto-triage armed.</span>
+        </div>
+      </section>
+
+      <!-- Right: Sidebar Control Deck -->
+      <aside class="sidebar-hud">
+        <!-- Section 1: Task Card Dispatcher Form -->
+        <div class="hud-section pixel-box">
+          <div class="section-header">
+            <span>🎛️ DISPATCH TASK CARD</span>
+            <span class="pixel-badge badge-green" id="triagePreviewBadge">AUTONOMOUS TRIAGE: READY</span>
+          </div>
+
+          <div class="task-form-group">
+            <label class="form-label" for="taskTitleInput">Task Objective / Query</label>
+            <input type="text" id="taskTitleInput" class="pixel-input" placeholder="e.g. Audit Dockerfile & Jenkins pipeline" autocomplete="off">
+          </div>
+
+          <div class="task-form-group">
+            <label class="form-label" for="taskDescInput">Target Scope & Details (Optional)</label>
+            <textarea id="taskDescInput" class="pixel-textarea" rows="2" placeholder="e.g. Focus on container privileges, CVEs, and secret leaks"></textarea>
+          </div>
+
+          <div class="task-form-group form-row">
+            <div style="flex: 1;">
+              <label class="form-label" for="taskAgentSelect">Assign Operative</label>
+              <select id="taskAgentSelect" class="pixel-select">
+                <option value="auto">Auto-Triage (Recommended)</option>
+                <option value="pentest">Rex (Penetration Tester)</option>
+                <option value="appsec">Ada (AppSec Engineer)</option>
+                <option value="devsecops">Gears (DevSecOps & Cloud)</option>
+              </select>
+            </div>
+
+            <div style="padding-top: 14px;">
+              <label class="dry-run-toggle">
+                <input type="checkbox" id="dryRunCheckbox" checked>
+                <span>DRY-RUN</span>
+              </label>
+            </div>
+          </div>
+
+          <button id="dispatchTaskBtn" class="pixel-btn pixel-btn-primary" style="width: 100%; justify-content: center; margin-top: 4px;">
+            DISPATCH TO INBOX
+          </button>
+        </div>
+
+        <!-- Section 2: Task Queue / Active Cards -->
+        <div class="hud-section">
+          <div class="section-header">
+            <span>📋 TASK QUEUE & STATUS</span>
+          </div>
+          <div id="queueListContainer" class="queue-list">
+            <!-- Rendered by task_cards.js -->
+          </div>
+        </div>
+
+        <!-- Section 3: Retro CRT Live Terminal & Inspector -->
+        <div class="terminal-deck">
+          <div class="terminal-tabs">
+            <button class="tab-btn active" data-tab="terminal">TERMINAL STREAM</button>
+            <button class="tab-btn" data-tab="triage">TRIAGE MATRIX</button>
+            <button class="tab-btn" data-tab="agent">OPERATIVE SPECS</button>
+            <button class="pixel-btn" id="clearTerminalBtn" style="margin-left: auto; padding: 2px 6px; font-size: 7px;">CLEAR</button>
+          </div>
+          <div id="terminalScreen" class="terminal-screen">
+            <!-- Stream logs rendered here -->
+          </div>
+        </div>
+      </aside>
+    </main>
+  </div>
+
+  <!-- Settings Modal (Dynamic Model Selector & Guardrails) -->
+  <div class="modal-overlay" id="settingsModalOverlay">
+    <div class="pixel-box settings-modal-card">
+      <div class="section-header" style="margin-bottom: 12px;">
+        <span>⚙️ OFFICE SETTINGS & AI MODEL CONFIG</span>
+        <button class="pixel-btn pixel-btn-danger" id="closeSettingsModalBtn" style="padding: 2px 6px; font-size: 8px;">X</button>
+      </div>
+
+      <div class="task-form-group">
+        <label class="form-label" for="modelPentest">Rex (Penetration Tester) AI Model</label>
+        <input type="text" id="modelPentest" list="customModelsList" class="pixel-input">
+      </div>
+
+      <div class="task-form-group">
+        <label class="form-label" for="modelAppsec">Ada (AppSec Engineer) AI Model</label>
+        <input type="text" id="modelAppsec" list="customModelsList" class="pixel-input">
+      </div>
+
+      <div class="task-form-group">
+        <label class="form-label" for="modelDevsecops">Gears (DevSecOps) AI Model</label>
+        <input type="text" id="modelDevsecops" list="customModelsList" class="pixel-input">
+      </div>
+
+      <datalist id="customModelsList">
+        <option value="claude-3-7-sonnet-20250219">
+        <option value="claude-3-5-sonnet-20241022">
+        <option value="gpt-4.5-preview">
+        <option value="gpt-4o">
+        <option value="gemini-2.0-flash">
+        <option value="deepseek-reasoner">
+        <option value="ollama/qwen2.5-coder:32b">
+      </datalist>
+
+      <div class="task-form-group form-row" style="margin-top: 10px;">
+        <div style="flex: 1;">
+          <label class="form-label" for="maxParallelInput">Max Parallel Workers</label>
+          <input type="number" id="maxParallelInput" min="1" max="4" value="2" class="pixel-input">
+        </div>
+        <div style="flex: 1; padding-top: 14px;">
+          <label class="dry-run-toggle">
+            <input type="checkbox" id="settingsDryRunDefault" checked>
+            <span>DRY-RUN DEFAULT</span>
+          </label>
+        </div>
+      </div>
+
+      <div style="margin-top: 16px; display: flex; justify-content: flex-end; gap: 8px;">
+        <button class="pixel-btn" id="cancelSettingsBtn">CANCEL</button>
+        <button class="pixel-btn pixel-btn-primary" id="saveSettingsBtn">SAVE CONFIG</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Client-side Scripts -->
+  <script src="/static/js/audio_synth.js"></script>
+  <script src="/static/js/agent_sprites.js"></script>
+  <script src="/static/js/office_canvas.js"></script>
+  <script src="/static/js/task_cards.js"></script>
+  <script src="/static/js/terminal_hud.js"></script>
+  <script src="/static/js/websocket_client.js"></script>
+
+  <!-- UI Glue & Modal Controller -->
+  <script>
+    class SettingsModalController {
+      constructor() {
+        this.overlay = document.getElementById("settingsModalOverlay");
+        this.openBtn = document.getElementById("openSettingsBtn");
+        this.closeBtn = document.getElementById("closeSettingsModalBtn");
+        this.cancelBtn = document.getElementById("cancelSettingsBtn");
+        this.saveBtn = document.getElementById("saveSettingsBtn");
+        
+        this.inputPentest = document.getElementById("modelPentest");
+        this.inputAppsec = document.getElementById("modelAppsec");
+        this.inputDevsecops = document.getElementById("modelDevsecops");
+        this.inputMaxParallel = document.getElementById("maxParallelInput");
+        this.checkDryRun = document.getElementById("settingsDryRunDefault");
+
+        this._bindEvents();
+      }
+
+      _bindEvents() {
+        if (this.openBtn) this.openBtn.addEventListener("click", () => this.open());
+        if (this.closeBtn) this.closeBtn.addEventListener("click", () => this.close());
+        if (this.cancelBtn) this.cancelBtn.addEventListener("click", () => this.close());
+        if (this.saveBtn) this.saveBtn.addEventListener("click", () => this.save());
+
+        const sfxBtn = document.getElementById("sfxToggleBtn");
+        if (sfxBtn) {
+          sfxBtn.addEventListener("click", () => {
+            if (window.retroAudio) {
+              const muted = window.retroAudio.toggleMute();
+              sfxBtn.textContent = muted ? "🔇 SFX: OFF" : "🔊 SFX: ON";
+            }
+          });
+        }
+
+        const clearBtn = document.getElementById("clearTerminalBtn");
+        if (clearBtn) {
+          clearBtn.addEventListener("click", () => {
+            if (window.terminalHud) window.terminalHud.clear();
+          });
+        }
+      }
+
+      async open() {
+        if (window.retroAudio) window.retroAudio.playBleep(600, 0.04);
+        try {
+          const res = await fetch("/api/settings");
+          if (res.ok) {
+            const data = await res.json();
+            const models = data.agent_models || {};
+            if (this.inputPentest) this.inputPentest.value = models.pentest || "claude-3-7-sonnet-20250219";
+            if (this.inputAppsec) this.inputAppsec.value = models.appsec || "claude-3-5-sonnet-20241022";
+            if (this.inputDevsecops) this.inputDevsecops.value = models.devsecops || "gpt-4o";
+            if (this.inputMaxParallel) this.inputMaxParallel.value = data.max_parallel_agents || 2;
+            if (this.checkDryRun) this.checkDryRun.checked = (data.dry_run_default !== false);
+          }
+        } catch (e) {}
+
+        if (this.overlay) this.overlay.classList.add("active");
+      }
+
+      close() {
+        if (window.retroAudio) window.retroAudio.playBleep(400, 0.04);
+        if (this.overlay) this.overlay.classList.remove("active");
+      }
+
+      async save() {
+        const payload = {
+          agent_models: {
+            pentest: (this.inputPentest ? this.inputPentest.value : "").trim(),
+            appsec: (this.inputAppsec ? this.inputAppsec.value : "").trim(),
+            devsecops: (this.inputDevsecops ? this.inputDevsecops.value : "").trim()
+          },
+          max_parallel_agents: parseInt(this.inputMaxParallel.value) || 2,
+          dry_run_default: this.checkDryRun ? this.checkDryRun.checked : true
+        };
+
+        try {
+          const res = await fetch("/api/settings", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(payload)
+          });
+          if (res.ok) {
+            if (window.retroAudio) window.retroAudio.playSuccess();
+            this.close();
+          }
+        } catch (e) {
+          console.error("Failed to save settings:", e);
+        }
+      }
+    }
+
+    document.addEventListener("DOMContentLoaded", () => {
+      window.settingsModal = new SettingsModalController();
+    });
+  </script>
+</body>
+</html>
